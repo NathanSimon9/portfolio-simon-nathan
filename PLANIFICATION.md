@@ -8,4 +8,4 @@
 one-pager + page de projets individuel
 
 ## **Hébergement :**
- GitHub Pages ou un autre service d’hébergement de votre choix (si vous utilisez un CMS avec des technologies exécutables au niveau serveur, alors il faut sélectionner un hébergeur en fonction de la technologie utilisée).
+ GitHub Pages 
