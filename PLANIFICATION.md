@@ -5,7 +5,7 @@
  J’utiliserai Three.js et GSAP pour créer une scène 3D animée selon le scroll, avec des objets 3D qui se déplacent et tournent en fonction de la progression de la page. J’ajouterai un système de particules et des effets réagissant au curseur, comme des particules attirées par la souris et des lumières qui suivent son mouvement. Les animations seront déclenchées par le défilement et les interactions utilisateur pour créer une expérience visuelle plus immersive.
 
 ## **Structure de navigation :** 
-one-pager, multipages, ou autre : selon votre concept.
+one-pager + page de projets individuel
 
 ## **Hébergement :**
  GitHub Pages ou un autre service d’hébergement de votre choix (si vous utilisez un CMS avec des technologies exécutables au niveau serveur, alors il faut sélectionner un hébergeur en fonction de la technologie utilisée).
