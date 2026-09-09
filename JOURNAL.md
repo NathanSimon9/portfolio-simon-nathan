@@ -9,7 +9,7 @@ J'ai complété mon moodboard pour le portfolio ainsi que le design dans Figma, 
 Tout ce que j'avais fait lors du premier cours n'a pas été sauvegardé sur GitHub, malgré le fait que je croyais avoir fait un commit. J'ai donc refait tout ce que j'avais réalisé et j'ai compris qu'il faut aussi synchroniser les changements après avoir fait le commit. Maintenant, je ne ferai plus cette erreur.
 
 ## Qu'est-ce que j'ai appris que je ne savais pas avant?
-J'ai appris qu'il faut aussi synchroniser les changements après avoir fait le commit.
+J'ai appris qu'il faut aussi synchroniser les changements après avoir fait le commit. J'ai aussi appris, grâce à l'IA, qu'un fichier JSON externe est une bonne solution pour un portfolio statique, car il permet de stocker les données des projets séparément du code HTML. J'ai compris que la récupération asynchrone avec fetch() permet de charger ces données au moment où la page s'ouvre, sans bloquer l'affichage, et que cela facilite la mise à jour des projets.
 
 ## Quelle est ma prochaine étape concrète?
 Importer les bibliothèques dont j'ai besoin pour mon projet et commencer le codage afin de réaliser le portfolio.
