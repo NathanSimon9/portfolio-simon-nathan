@@ -1,5 +1,6 @@
 ## **Gestion des données :**
- séparer les données de vos projets dans une base de données ou fichier externe (par exemple, le format .json). Ces données devront être récupérées et affichées de façon asynchrone au chargement de la page du portfolio. Selon la nature de votre portfolio et l’aisance de mise à jour des données des projets, sélectionner le type de base de données ou CMS et la technique de récupération de données de votre choix.
+- **Type :** fichier externe JSON
+- **Technique :** récupération asynchrone avec fetch() en JavaScript
 
 ## **Animations :**
  J’utiliserai Three.js et GSAP pour créer une scène 3D animée selon le scroll, avec des objets 3D qui se déplacent et tournent en fonction de la progression de la page. J’ajouterai un système de particules et des effets réagissant au curseur, comme des particules attirées par la souris et des lumières qui suivent son mouvement. Les animations seront déclenchées par le défilement et les interactions utilisateur pour créer une expérience visuelle plus immersive.
