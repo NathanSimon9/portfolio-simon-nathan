@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Portfolio personnel",
+    "shortDescription": "Un portfolio moderne pour présenter mes projets et mon parcours.",
+    "context": "J'ai créé ce projet pour présenter mes compétences, mes réalisations et mon identité visuelle dans un format simple et professionnel.",
+    "role": "Design, développement front-end et organisation du contenu.",
+    "result": "Le site permet de présenter mon travail avec une navigation claire et une interface inspirée du design contemporain.",
+    "tags": ["HTML", "CSS", "JavaScript", "JSON"]
+  },
+  {
+    "id": 2,
+    "title": "Application de gestion",
+    "shortDescription": "Une interface pour organiser et suivre des tâches ou des projets.",
+    "context": "Le but était de concevoir une application web intuitive pour gérer plusieurs tâches de manière simple et efficace.",
+    "role": "UI design, architecture de l'information et intégration front-end.",
+    "result": "L'application met en avant la lisibilité, l'accessibilité et la facilité d'utilisation.",
+    "tags": ["UX", "Interface", "Front-end"]
+  },
+  {
+    "id": 3,
+    "title": "Landing page produit",
+    "shortDescription": "Une page de présentation pour mettre en valeur un produit ou une marque.",
+    "context": "Ce projet visait à créer une landing page efficace, moderne et orientée conversion pour une marque fictive.",
+    "role": "Design visuel, hiérarchie de contenu et animation légère.",
+    "result": "La page présente le produit de manière claire avec un impact visuel fort et une navigation fluide.",
+    "tags": ["Marketing", "Animation", "Branding"]
+  }
+]

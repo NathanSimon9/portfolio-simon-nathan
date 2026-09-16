@@ -1,0 +1,63 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #020812;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(117, 138, 255, 0.18), transparent 22%),
+    radial-gradient(circle at 80% 35%, rgba(125, 245, 223, 0.12), transparent 18%),
+    #020812;
+}
+
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.sky-section {
+  position: relative;
+  width: 100vw;
+  min-height: 60vh;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 8, 18, 1) 0%,
+    rgba(12, 29, 58, 0.88) 18%,
+    rgba(52, 94, 160, 0.8) 52%,
+    rgba(128, 204, 255, 0.96) 100%
+  );
+}
+
+.sky-content {
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sky-label {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
