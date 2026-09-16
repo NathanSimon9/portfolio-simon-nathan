@@ -23,32 +23,31 @@ Oui, et cela a servi pour la partie gestion des données. Je lui ai demandé ce 
 
 <br>
 
+# IA
+
 ## Date : 
 09 septembre 2026
 
 ## Prompt :
+
+### 1
  "Quel est le meilleur type de gestion de données pour mon portfolio ? Je veux utiliser un fichier externe et récupérer les données de façon asynchrone au chargement de la page."
+
+### 2
+ "Explique-moi ce que fait fetch() avec un fichier JSON et pourquoi c'est utile pour afficher des projets dans mon portfolio."
 
 ## Outil : 
 Copilot
 
 ## Résultat :
+
+### 1
  L'IA m'a recommandé d'utiliser un fichier JSON externe pour stocker les données des projets, puis de les récupérer avec fetch() en JavaScript au chargement de la page.
 
+### 2
+ L'IA m'a expliqué que fetch() permet de lire un fichier JSON externe, de le transformer en objet JavaScript et de l'afficher dynamiquement dans la page. Elle m'a aussi clarifié que cette méthode est asynchrone, ce qui signifie que la page continue de se charger sans blocage pendant que les données arrivent. J'ai utilisé cette explication pour mieux comprendre la technique que j'applique dans mon portfolio.
 
-<br>
 
-## Date :
-09 septembre 2026
-
-## Prompt :
-"Explique-moi ce que fait fetch() avec un fichier JSON et pourquoi c'est utile pour afficher des projets dans mon portfolio."
-
-## Outil :
-Copilot
-
-## Résultat :
-L'IA m'a expliqué que fetch() permet de lire un fichier JSON externe, de le transformer en objet JavaScript et de l'afficher dynamiquement dans la page. Elle m'a aussi clarifié que cette méthode est asynchrone, ce qui signifie que la page continue de se charger sans blocage pendant que les données arrivent. J'ai utilisé cette explication pour mieux comprendre la technique que j'applique dans mon portfolio.
 
 
 
