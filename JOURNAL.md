@@ -49,5 +49,34 @@ Copilot
 
 
 
+## Date : 
+17 septembre 2026
+
+## Prompt :
+
+### 1
+ "J'ai besoin d'une section héro. la section héro a un fond noir et des particules representant des étoiles.Les etoiles doive subtilement essayer de ne pas toucher à mon curseur. "
+
+ ### 2
+ "La prochaine section doit etre un degrader du noir de la section de avant à un bleu ciel.Une fois le bleu ciel atteint il me faut 100vh du bleu ciel en couleur unis puis sur cette parti la ajoute limage des nuages dans mon fichier image avec une legere animation pour reproduire le mouvement naturelle des nuages. "
+
+## Outil : 
+Copilot
+
+## Résultat :
+
+### 1
+ L'IA a créé exactement les background hero que j'avais en tête
+
+ ### 2
+ L'IA a créé exactement la deuxieme section que j'avais en tête
+
+
+
+
+
+
+
+
 
 
