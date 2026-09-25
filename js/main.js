@@ -244,3 +244,38 @@ if (seaCanvas) {
     window.addEventListener('resize', resizeSeaCanvas);
   }
 }
+
+
+// Parallaxe de transition : l'océan remonte plus vite que la section de nuages.
+// L'océan et les îles restent dans le même conteneur, donc leur position relative ne change jamais.
+const oceanSection = document.querySelector('.sea-transition-section');
+
+if (oceanSection) {
+  let oceanParallaxY = 0;
+  let ticking = false;
+
+  function updateOceanParallax() {
+    const rect = oceanSection.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+
+    // Le margin-top de 50vh décale visuellement la section. On ajoute 60vh au
+    // calcul pour faire commencer le parallaxe 10vh avant son ancien point de départ.
+    const artificialOffset = viewportHeight * 0.6;
+    const distanceIntoView = Math.max(0, viewportHeight - rect.top + artificialOffset);
+    const parallax = Math.min(700, distanceIntoView * 0.35);
+    oceanParallaxY = -parallax;
+    oceanSection.style.setProperty('--ocean-parallax-y', `${oceanParallaxY}px`);
+    ticking = false;
+  }
+
+  function requestOceanParallaxUpdate() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateOceanParallax);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestOceanParallaxUpdate, { passive: true });
+  window.addEventListener('resize', requestOceanParallaxUpdate);
+  updateOceanParallax();
+}
