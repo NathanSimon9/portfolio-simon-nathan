@@ -12,6 +12,11 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   overflow-x: hidden;
+  max-width: 100%;
 }
