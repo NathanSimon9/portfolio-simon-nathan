@@ -80,14 +80,23 @@ Copilot
 ### 1
  "J'ai besoin d'une effet sur mon image d'océan pour reproduire le mouvement de leau "
 
+ ### 2
+ "Je veu un effet de parralaxe de ma derniere section. Je veux que le parralaxe commence 10vh avant que lon apercoit la derniere section "
+
 
 ## Outil : 
 Copilot
+
+chatgpt
 
 ## Résultat :
 
 ### 1
  L'IA a créé avec des animation css une animation recréant le mouvement de l'eau
+
+### 2
+
+ChatGPT a créé le paralaxe donc la derniere section monte plus vite que cell du ciel
 
 
 
