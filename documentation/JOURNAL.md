@@ -72,6 +72,25 @@ Copilot
  L'IA a créé exactement la deuxieme section que j'avais en tête
 
 
+ ## Date : 
+25 septembre 2026
+
+## Prompt :
+
+### 1
+ "J'ai besoin d'une effet sur mon image d'océan pour reproduire le mouvement de leau "
+
+
+## Outil : 
+Copilot
+
+## Résultat :
+
+### 1
+ L'IA a créé avec des animation css une animation recréant le mouvement de l'eau
+
+
+
 
 
 
