@@ -1,23 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --cloud-bottom-color: rgba(128, 204, 255, 0.96);
-}
-
-html, body {
-  margin: 0;
-  width: 100%;
-  min-height: 100%;
-  background: var(--cloud-bottom-color);
-  font-family: "Inter", sans-serif;
-}
-
-body {
-  overflow-x: hidden;
-}
-
 .hero {
   position: relative;
   width: 100vw;
@@ -223,7 +203,7 @@ body {
   width: 100vw;
   height: 200vh;
   overflow: hidden;
-  background: var(--cloud-bottom-color) url("image/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
+  background: var(--cloud-bottom-color) url("../assets/images/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
   margin-top: -2px;
   padding: 0;
 }
@@ -232,7 +212,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("image/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
+  background: url("../assets/images/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
   filter: url("#water-turbulence");
   transform: scale(1.04);
   transform-origin: center center;

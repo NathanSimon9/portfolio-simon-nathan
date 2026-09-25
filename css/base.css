@@ -1,0 +1,17 @@
+/* Styles de base. */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  background: var(--cloud-bottom-color);
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
