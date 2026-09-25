@@ -202,7 +202,8 @@
   position: relative;
   width: 100%;
   height: 200vh;
-  overflow: visible;
+  overflow-x: clip;
+  overflow-y: visible;
   background: var(--cloud-bottom-color) url("../assets/images/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
   margin-top: -2px;
   padding: 0;
@@ -302,8 +303,7 @@
 }
 
 /* Îles : décor fixe de la transition ciel/océan.
-   Chaque île garde une taille fixe en pixels et son centre est placé sur le bord de l'écran.
-   La base reste toujours alignée sur la ligne de début de la section océanique. */
+   Grande taille sur ordinateur, taille réduite sur tablette, une seule île sur téléphone. */
 .sea-transition-section > .scene__decor {
   z-index: 3;
   overflow: visible;
@@ -316,7 +316,7 @@
   left: 0;
   right: 0;
   top: 0;
-  height: 0;
+  height: 0; /* Le point d’ancrage vertical reste fixe au niveau de la transition. */
   z-index: 3;
   pointer-events: none;
   overflow: visible;
@@ -324,9 +324,11 @@
 
 .island {
   position: absolute;
-  bottom: 0;
-  width: 1000px;
+  bottom: 0; /* La base reste exactement à la même hauteur; seule la partie haute monte quand l’île grandit. */
+  top: auto;
+  width: 2000px;
   height: auto;
+  transform-origin: 50% 100%;
   max-width: none;
   object-fit: contain;
   pointer-events: none;
@@ -334,23 +336,60 @@
   filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.16));
 }
 
-/* Le centre de chaque image est exactement sur le bord de l'écran. */
+/* CONTRÔLES DE HAUTEUR DES ÎLES
+   Modifie seulement ces 3 valeurs :
+   - ordinateur : --island-top-desktop
+   - tablette/iPad : --island-top-tablet
+   - téléphone : --island-top-phone
+   Valeur positive = descend l'image. Valeur négative = monte l'image. */
+:root {
+  --island-top-desktop: -870px;
+  --island-top-tablet: -580px;
+  --island-top-phone: -700px;
+}
+
+/* Ordinateur : 2000 px.
+   TOP est volontairement réglable ici pour ajuster la hauteur des îles. */
+.island {
+  top: var(--island-top-desktop, 0px);
+  bottom: auto;
+}
+
 .island--left {
-  left: -500px;
+  left: -1000px;
   right: auto;
 }
 
 .island--right {
-  right: -500px;
+  right: -1000px;
   left: auto;
   transform: scaleX(-1);
 }
 
-/*
-  Écran trop petit : une seule île, centrée.
-  Elle garde exactement la même taille en pixels et sa base reste sur l'horizon.
-*/
-@media (max-width: 1000px) {
+/* Tablette (ex. iPad) : 1000 px, deux îles. */
+@media (max-width: 1899px) and (min-width: 1401px) {
+  .island {
+    width: 1300px;
+    top: var(--island-top-tablet, 0px);
+  }
+
+  .island--left {
+    left: -500px;
+  }
+
+  .island--right {
+    right: -500px;
+  }
+}
+
+/* Téléphone : une seule île centrée, 1000 px.
+   Le débordement est coupé horizontalement sans créer de largeur supplémentaire. */
+@media (max-width: 1400px) {
+  .island {
+    width: 1600px;
+    top: var(--island-top-phone, 0px);
+  }
+
   .island--left {
     left: 50%;
     right: auto;
@@ -361,4 +400,3 @@
     display: none;
   }
 }
-
