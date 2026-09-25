@@ -20,26 +20,36 @@
   </head>
   <body>
     <main id="accueil">
-      <section class="hero">
-        <canvas class="hero-canvas" aria-hidden="true"></canvas>
+      <section class="hero scene">
+        <div class="scene__decor">
+          <canvas class="hero-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="container scene__content"></div>
       </section>
 
-      <section class="sky-section">
-        <div class="sky-content"></div>
+      <section class="sky-section scene">
+        <div class="scene__decor">
+          <div class="sky-content"></div>
+        </div>
+        <div class="container scene__content"></div>
       </section>
 
-      <section class="cloud-plain-section">
-        <div class="cloud-layer cloud-layer--plain" aria-hidden="true">
+      <section class="cloud-plain-section scene">
+        <div class="scene__decor">
+          <div class="cloud-layer cloud-layer--plain" aria-hidden="true">
           <img class="cloud cloud-plain-1" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
           <img class="cloud cloud-plain-2" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
           <img class="cloud cloud-plain-3" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
           <img class="cloud cloud-plain-4" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
           <img class="cloud cloud-plain-5" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
+          </div>
         </div>
+        <div class="container scene__content"></div>
       </section>
 
-      <section class="sea-transition-section">
-        <svg class="water-filter-defs" aria-hidden="true">
+      <section class="sea-transition-section scene">
+        <div class="scene__decor">
+          <svg class="water-filter-defs" aria-hidden="true">
           <filter id="water-turbulence" x="-8%" y="-8%" width="116%" height="116%">
             <feTurbulence
               id="water-noise"
@@ -58,7 +68,9 @@
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="24" xChannelSelector="R" yChannelSelector="G" />
           </filter>
-        </svg>
+          </svg>
+        </div>
+        <div class="container scene__content"></div>
       </section>
     </main>
 
