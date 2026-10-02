@@ -302,6 +302,33 @@ if (projectsContainer) {
     });
 }
 
+const bubbleLayer = document.querySelector('.bubble-layer');
+
+if (bubbleLayer) {
+  const bubbleCount = 16;
+
+  for (let index = 0; index < bubbleCount; index += 1) {
+    const bubble = document.createElement('button');
+    bubble.className = 'ocean-bubble';
+    bubble.type = 'button';
+    bubble.setAttribute('aria-label', 'Faire éclater la bulle');
+    bubble.style.setProperty('--bubble-left', `${8 + Math.random() * 84}%`);
+    bubble.style.setProperty('--bubble-size', `${0.45 + Math.random() * 1.9}vw`);
+    bubble.style.setProperty('--bubble-duration', `${7 + Math.random() * 16}s`);
+    bubble.style.setProperty('--bubble-delay', `${-Math.random() * 20}s`);
+    bubble.style.setProperty('--bubble-drift', `${-3 + Math.random() * 6}vw`);
+    bubble.style.setProperty('--bubble-rise', `${85 + Math.random() * 45}vh`);
+    bubble.style.setProperty('--bubble-opacity', `${0.35 + Math.random() * 0.5}`);
+
+    bubble.addEventListener('click', () => {
+      bubble.classList.add('is-popped');
+      window.setTimeout(() => bubble.remove(), 260);
+    });
+
+    bubbleLayer.appendChild(bubble);
+  }
+}
+
 const demoVideo = document.querySelector('.demo-video');
 const soundToggle = document.querySelector('.video-sound-toggle');
 

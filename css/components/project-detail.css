@@ -1,4 +1,9 @@
 /* Mise en page des détails d'un projet. */
+.project-page-body {
+  background: #020812;
+  color: #fff;
+}
+
 .project-page {
   min-height: 100vh;
   padding: 48px 0;
