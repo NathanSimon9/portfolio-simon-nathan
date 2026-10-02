@@ -1,33 +1,107 @@
-/* Navigation des pages secondaires. */
+/* Navigation principale — ambiance spatiale du moodboard */
 .site-header {
-  position: relative;
+  position: absolute;
+  inset: 0 0 auto 0;
   z-index: 10;
+  color: #f4f8ff;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-.container {
-  width: min(1200px, calc(100% - 40px));
+.nav.container {
+  width: min(1440px, calc(100% - 8vw));
+  min-height: 76px;
   margin: 0 auto;
-}
-
-.nav {
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 0;
+  gap: 28px;
 }
 
 .logo {
-  color: inherit;
+  display: inline-flex;
+  align-items: baseline;
+  color: #fff;
   text-decoration: none;
-  font-weight: 800;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.logo span {
+  color: #71b9ff;
+}
+
+.nav-caption {
+  margin-right: auto;
+  color: rgba(224, 237, 255, 0.58);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 .menu {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: clamp(20px, 3vw, 46px);
 }
 
 .menu a {
-  color: inherit;
+  position: relative;
+  padding: 10px 0;
+  color: rgba(244, 248, 255, 0.84);
   text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  transition: color 180ms ease;
 }
+
+
+.menu a:hover,
+.menu a:focus-visible {
+  color: #fff;
+}
+
+#apropos,
+#projets,
+#contact {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 700px) {
+  .nav.container {
+    width: calc(100% - 32px);
+    min-height: 68px;
+    gap: 16px;
+  }
+
+  .nav-caption {
+    display: none;
+  }
+
+  .menu {
+    gap: clamp(12px, 4vw, 22px);
+  }
+
+  .menu a {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu a,
+  .logo {
+    transition: none;
+  }
+}
+
