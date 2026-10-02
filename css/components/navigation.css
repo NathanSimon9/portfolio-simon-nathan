@@ -100,7 +100,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .menu a,
+  .logo {
+    transition: none;
+  }
 }
+
+
 
 /* Défilement fluide vers les sections depuis la navigation */
 html {
