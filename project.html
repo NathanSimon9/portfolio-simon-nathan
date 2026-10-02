@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projet | Portfolio</title>
+    <meta name="theme-color" content="#05070d" />
+    <meta name="description" content="Découvre les détails d’un projet du portfolio de Nathan Simon." />
+    <title>Projet | Nathan Simon — Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/layout.css" />
@@ -17,25 +16,41 @@
     <link rel="stylesheet" href="css/components/project-detail.css" />
   </head>
   <body class="project-page-body">
-    <header class="site-header">
+    <canvas class="project-space-canvas" aria-hidden="true"></canvas>
+    <div class="project-space-haze" aria-hidden="true"></div>
+
+    <header class="site-header project-header">
       <div class="container nav">
-        <a href="index.html" class="logo">SN</a>
-        <nav class="menu">
-          <a href="index.html#apropos">À propos</a>
+        <a href="index.html" class="logo" aria-label="Nathan Simon — accueil">SN<span>.</span></a>
+        <span class="nav-caption">PORTFOLIO MULTIMÉDIA</span>
+        <nav class="menu" aria-label="Navigation principale">
           <a href="index.html#projets">Projets</a>
+          <a href="index.html#apropos">À propos</a>
           <a href="index.html#contact">Contact</a>
         </nav>
       </div>
     </header>
 
-    <main class="project-page section">
-      <div class="container">
-        <a href="index.html" class="back-link">← Retour</a>
-        <article class="project-detail" data-project-detail></article>
+    <main class="project-page">
+      <div class="container project-shell">
+        <div class="project-topline">
+          <a href="index.html#projets" class="back-link"><span aria-hidden="true">←</span> Tous les projets</a>
+          <span class="project-availability"><span></span> ÉTUDE DE PROJET</span>
+        </div>
+
+        <article class="project-detail" data-project-detail aria-live="polite">
+          <div class="project-loading">Chargement du projet<span>…</span></div>
+        </article>
+
+        <nav class="project-pagination" data-project-navigation aria-label="Navigation entre les projets"></nav>
+        <footer class="project-footer">
+          <a class="project-footer__brand" href="index.html">NATHAN SIMON<span>.</span></a>
+          <span>Portfolio multimédia · 2026</span>
+          <a href="index.html#contact">Travaillons ensemble <span aria-hidden="true">↗</span></a>
+        </footer>
       </div>
     </main>
 
-    <script type="module" src="js/main.js"></script>
     <script type="module" src="js/project.js"></script>
   </body>
 </html>
