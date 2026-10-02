@@ -98,6 +98,30 @@ chatgpt
 
 ChatGPT a créé le paralaxe donc la derniere section monte plus vite que cell du ciel
 
+## Date : 
+1er oct 2026
+
+## Prompt :
+
+### 1
+ "met mon video du dossier video qui jou en boucle et qui jou automatiquement ajoute un bouton subtile pour activer et desactiver le sons "
+
+ ### 2
+ "je veux des ligne de competence animer avec du anim js pour montre mes competence et que quand on lest vois ya une animation photo shop fais la ligne monter jusqua 95% davinci 98% after effect 80% maya 75% unity 75%"
+
+
+## Outil : 
+Copilot
+
+## Résultat :
+
+### 1
+ Il a fais mon bouton et lancer automatiquement le video en boucle
+
+### 2
+
+il a fais lanimation demander.
+
 
 
 

@@ -1,3 +1,6 @@
+import { loadProjects } from "./data.js";
+import { createProjectCard } from "./components/project-card.js";
+
 const heroCanvas = document.querySelector('.hero-canvas');
 
 if (heroCanvas) {
@@ -246,36 +249,98 @@ if (seaCanvas) {
 }
 
 
-// Parallaxe de transition : l'océan remonte plus vite que la section de nuages.
-// L'océan et les îles restent dans le même conteneur, donc leur position relative ne change jamais.
+// Parallaxe de transition : la section de nuages descend légèrement avant l'océan.
+const cloudSection = document.querySelector('.cloud-plain-section');
 const oceanSection = document.querySelector('.sea-transition-section');
 
-if (oceanSection) {
-  let oceanParallaxY = 0;
+if (cloudSection && oceanSection) {
+  let cloudParallaxY = 0;
   let ticking = false;
 
-  function updateOceanParallax() {
-    const rect = oceanSection.getBoundingClientRect();
+  function updateCloudParallax() {
+    const oceanRect = oceanSection.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
 
-    // Le margin-top de 50vh décale visuellement la section. On ajoute 60vh au
-    // calcul pour faire commencer le parallaxe 10vh avant son ancien point de départ.
-    const artificialOffset = viewportHeight * 0.6;
-    const distanceIntoView = Math.max(0, viewportHeight - rect.top + artificialOffset);
+    const leadValue = getComputedStyle(cloudSection)
+      .getPropertyValue('--cloud-parallax-lead')
+      .trim();
+    const artificialOffset = leadValue.endsWith('vh')
+      ? (parseFloat(leadValue) * viewportHeight) / 100
+      : parseFloat(leadValue);
+    const distanceIntoView = Math.max(0, viewportHeight - oceanRect.top + artificialOffset);
     const parallax = Math.min(700, distanceIntoView * 0.35);
-    oceanParallaxY = -parallax;
-    oceanSection.style.setProperty('--ocean-parallax-y', `${oceanParallaxY}px`);
+    cloudParallaxY = parallax;
+    cloudSection.style.setProperty('--cloud-parallax-y', `${cloudParallaxY}px`);
     ticking = false;
   }
 
-  function requestOceanParallaxUpdate() {
+  function requestCloudParallaxUpdate() {
     if (!ticking) {
-      window.requestAnimationFrame(updateOceanParallax);
+      window.requestAnimationFrame(updateCloudParallax);
       ticking = true;
     }
   }
 
-  window.addEventListener('scroll', requestOceanParallaxUpdate, { passive: true });
-  window.addEventListener('resize', requestOceanParallaxUpdate);
-  updateOceanParallax();
+  window.addEventListener('scroll', requestCloudParallaxUpdate, { passive: true });
+  window.addEventListener('resize', requestCloudParallaxUpdate);
+  updateCloudParallax();
+}
+
+const projectsContainer = document.querySelector('[data-projects]');
+
+if (projectsContainer) {
+  loadProjects()
+    .then((projects) => {
+      const fragment = document.createDocumentFragment();
+      projects.forEach((project) => {
+        fragment.appendChild(createProjectCard(project));
+      });
+      projectsContainer.appendChild(fragment);
+    })
+    .catch(() => {
+      projectsContainer.innerHTML = '<p>Les projets sont momentanément indisponibles.</p>';
+    });
+}
+
+const demoVideo = document.querySelector('.demo-video');
+const soundToggle = document.querySelector('.video-sound-toggle');
+
+if (demoVideo && soundToggle) {
+  soundToggle.addEventListener('click', () => {
+    demoVideo.muted = !demoVideo.muted;
+    soundToggle.setAttribute('aria-pressed', String(!demoVideo.muted));
+    soundToggle.setAttribute(
+      'aria-label',
+      demoVideo.muted ? 'Activer le son' : 'Couper le son'
+    );
+    soundToggle.textContent = demoVideo.muted ? '🔇' : '🔊';
+  });
+}
+
+const skillMeters = document.querySelectorAll('.software-list meter[data-value]');
+
+if (skillMeters.length) {
+  const animateMeter = (meter) => {
+    const target = Number(meter.dataset.value);
+    const startTime = performance.now();
+
+    function updateMeter(now) {
+      const progress = Math.min(1, (now - startTime) / 900);
+      meter.value = target * (1 - Math.pow(1 - progress, 3));
+      if (progress < 1) requestAnimationFrame(updateMeter);
+    }
+
+    requestAnimationFrame(updateMeter);
+  };
+
+  const meterObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animateMeter(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.35 });
+
+  skillMeters.forEach((meter) => meterObserver.observe(meter));
 }

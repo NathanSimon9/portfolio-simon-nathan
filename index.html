@@ -11,12 +11,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components/home-content.css" />
   </head>
   <body>
     <main id="accueil">
@@ -24,13 +25,26 @@
         <div class="scene__decor">
           <canvas class="hero-canvas" aria-hidden="true"></canvas>
         </div>
-        <div class="container scene__content"></div>
+        <div class="container scene__content hero-content">
+          <p class="hero-kicker">Portfolio multimédias</p>
+          <h1>NATHAN<br />SIMON</h1>
+        </div>
       </section>
 
       <section class="scene sky-section">
         <div class="scene__decor"></div>
         <div class="container scene__content">
-          <div class="sky-content"></div>
+          <div class="sky-content">
+            <section class="demo-panel" aria-labelledby="demo-title">
+              <h2 id="demo-title">DÉMO RÉEL</h2>
+              <div class="demo-frame">
+                <video class="demo-video" autoplay muted loop playsinline preload="metadata" aria-label="Démo vidéo de Simon Nathan">
+                  <source src="assets/images/video/nathan_simon_horizontal.mp4" type="video/mp4" />
+                </video>
+                <button class="video-sound-toggle" type="button" aria-pressed="false" aria-label="Activer le son">🔇</button>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 
@@ -44,7 +58,39 @@
           <img class="cloud cloud-plain-5" src="assets/images/special-3d-rendering-smooth-clouds-flowing-shapes-isolated-transparent-backgrounds-png.webp" alt="" />
           </div>
         </div>
-        <div class="container scene__content"></div>
+        <div class="container scene__content cloud-content">
+          <section class="skills-panel" aria-labelledby="skills-title">
+            <div class="skills-list">
+              <h2 id="skills-title">COMPÉTENCES</h2>
+              <ul>
+                <li>Exploiter les nouvelles technologies et leur potentiel créateur</li>
+                <li>Élaborer des spectacles augmentés</li>
+                <li>Assembler des environnements de réalité virtuelle</li>
+                <li>Réaliser et tourner des vidéos</li>
+                <li>Animer des créations 2D et 3D</li>
+                <li>Collaborer avec diverses disciplines artistiques ou interdisciplinaires</li>
+              </ul>
+            </div>
+            <div class="software-list">
+              <h2>LOGICIELS</h2>
+              <ul>
+                  <li><span>Photoshop</span><meter min="0" max="100" value="0" data-value="95">95%</meter></li>
+                  <li><span>DaVinci Resolve</span><meter min="0" max="100" value="0" data-value="98">98%</meter></li>
+                  <li><span>After Effects</span><meter min="0" max="100" value="0" data-value="80">80%</meter></li>
+                  <li><span>Maya</span><meter min="0" max="100" value="0" data-value="75">75%</meter></li>
+                  <li><span>Unity</span><meter min="0" max="100" value="0" data-value="75">75%</meter></li>
+              </ul>
+            </div>
+          </section>
+          <div class="software-badges" aria-label="Logiciels utilisés">
+            <img src="image/adobe-after-effect-logo-square-rounded-adobe-after-effect-logo-adobe-after-effect-logo-free-download-free-png.png" alt="After Effects" />
+            <img src="image/Autodesk-Maya-logo.png" alt="Maya" />
+            <img src="image/TouchDesigner_logo-300x300.png" alt="TouchDesigner" />
+            <img src="image/photoshop-5977809_1280.png" alt="Photoshop" />
+            <img src="image/davinci-resolve-logo-davinci-resolve-icon-transparent-background-free-png.webp" alt="DaVinci Resolve" />
+            <img src="image/adobe-illustrator-icon-logo.png" alt="Illustrator" />
+          </div>
+        </div>
       </section>
 
       <section class="scene sea-transition-section">
@@ -83,7 +129,17 @@
           </filter>
           </svg>
         </div>
-        <div class="container scene__content"></div>
+        <div class="container scene__content sea-content">
+          <section class="projects-panel" aria-labelledby="projects-title">
+            <h2 id="projects-title">PROJETS</h2>
+            <div class="project-grid" data-projects></div>
+          </section>
+          <section class="contact-panel" aria-labelledby="contact-title">
+            <h2 id="contact-title">CONTACT</h2>
+            <p><strong aria-hidden="true">✉</strong> <a href="mailto:nathansimon1234567@gmail.com">nathansimon1234567@gmail.com</a></p>
+            <p><strong aria-hidden="true">☎</strong> <a href="tel:+15145609515">514-560-9515</a></p>
+          </section>
+        </div>
       </section>
     </main>
 

@@ -124,23 +124,50 @@
 .sky-section {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
   background: linear-gradient(
     180deg,
-    rgba(2, 8, 18, 1) 0%,
-    rgba(12, 29, 58, 0.88) 18%,
-    rgba(52, 94, 160, 0.8) 52%,
-    rgba(128, 204, 255, 0.96) 100%
+    #020812 0%,
+    #030a16 8%,
+    #040d1d 16%,
+    #061126 24%,
+    #091731 32%,
+    #0d203f 40%,
+    #122b50 48%,
+    #1a3a64 56%,
+    #254c7c 64%,
+    #376b9d 72%,
+    #5795c7 80%,
+    var(--cloud-bottom-color) 92%,
+    var(--cloud-bottom-color) 100%
   );
+}
+
+.sky-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%);
 }
 
 .cloud-plain-section {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   overflow: hidden;
   background: var(--cloud-bottom-color);
   cursor: default;
+  --cloud-parallax-lead: 50vh;
+  --cloud-parallax-y: 0px;
+  transform: translate3d(0, var(--cloud-parallax-y), 0);
+  will-change: transform;
 }
 
 .cloud-layer--plain {
@@ -207,9 +234,6 @@
   background: var(--cloud-bottom-color) url("../assets/images/adc27e9e-5885-4db0-adbf-08c917ec148b.png") center center / cover no-repeat;
   margin-top: 50vh;
   padding: 0;
-  --ocean-parallax-y: 0px;
-  transform: translate3d(0, var(--ocean-parallax-y), 0);
-  will-change: transform;
 }
 
 .sea-transition-section::before {
@@ -282,7 +306,7 @@
 }
 
 .sky-label {
-  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-size: 1.4vw;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.7);
