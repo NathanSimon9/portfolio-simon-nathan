@@ -225,6 +225,19 @@
   pointer-events: none;
 }
 
+/* Fluide au curseur : canvas limité à la section océan, sans modifier les autres scènes. */
+.sea-transition-section > .ocean-fluid-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Le fluide blanc reste indépendant de la distorsion automatique de l’océan. */
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+}
+
 .sea-transition-section {
   position: relative;
   width: 100%;

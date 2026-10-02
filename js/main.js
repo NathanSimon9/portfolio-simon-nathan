@@ -378,3 +378,126 @@ if (skillMeters.length) {
   window.addEventListener('resize', startVisibleMeters);
   startVisibleMeters();
 }
+
+
+// Ondes blanches déclenchées par le déplacement du curseur dans l'océan.
+// Cette animation est dessinée sur son propre canvas : la distorsion automatique
+// et l'animation de fond de l'océan ne sont pas modifiées.
+(() => {
+  const section = document.querySelector('.sea-transition-section');
+  const canvas = section?.querySelector('.ocean-fluid-canvas');
+  if (!section || !canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+  if (!ctx) return;
+
+  let width = 1;
+  let height = 1;
+  let dpr = 1;
+  let previous = null;
+  let raf = 0;
+  let lastFrame = 0;
+  const waves = [];
+
+  function resize() {
+    const rect = section.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = Math.max(1, rect.width);
+    height = Math.max(1, rect.height);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+  }
+
+  function addWave(x, y, speed) {
+    const intensity = Math.min(1, speed / 30);
+    // Plusieurs anneaux espacés donnent une vraie lecture d'onde, pas une traînée.
+    const ringCount = 3;
+    for (let i = 0; i < ringCount; i++) {
+      waves.push({
+        x, y,
+        radius: 4 + i * (5 + intensity * 3),
+        maxRadius: 48 + intensity * 125 + i * 18,
+        age: i * 0.075,
+        life: 0.75 + intensity * 0.45,
+        alpha: 0.08 + intensity * 0.16,
+        lineWidth: 0.7 + intensity * 1.1,
+        wobble: Math.random() * Math.PI * 2,
+        ellipticity: 0.88 + Math.random() * 0.24
+      });
+    }
+    if (waves.length > 180) waves.splice(0, waves.length - 180);
+    if (!raf) {
+      lastFrame = performance.now();
+      raf = requestAnimationFrame(draw);
+    }
+  }
+
+  function draw(now) {
+    const dt = Math.min(0.033, Math.max(0.001, (now - lastFrame) / 1000));
+    lastFrame = now;
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = waves.length - 1; i >= 0; i--) {
+      const wave = waves[i];
+      wave.age += dt;
+      if (wave.age >= wave.life) {
+        waves.splice(i, 1);
+        continue;
+      }
+
+      const progress = wave.age / wave.life;
+      const eased = 1 - Math.pow(1 - progress, 1.5);
+      const radius = wave.radius + (wave.maxRadius - wave.radius) * eased;
+      const fade = Math.pow(1 - progress, 1.8);
+      const alpha = wave.alpha * fade;
+      if (alpha < 0.006) continue;
+
+      ctx.save();
+      ctx.translate(wave.x, wave.y);
+      ctx.scale(1, wave.ellipticity);
+      ctx.globalCompositeOperation = 'screen';
+      ctx.lineWidth = wave.lineWidth * (1 - progress * 0.35);
+      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      ctx.shadowColor = `rgba(225,245,255,${alpha * 0.45})`;
+      ctx.shadowBlur = 2 + alpha * 5;
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    if (waves.length) {
+      raf = requestAnimationFrame(draw);
+    } else {
+      raf = 0;
+      ctx.clearRect(0, 0, width, height);
+    }
+  }
+
+  section.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'touch') return;
+    const rect = section.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+      previous = null;
+      return;
+    }
+    if (previous) {
+      const dx = x - previous.x;
+      const dy = y - previous.y;
+      const distance = Math.hypot(dx, dy);
+      // La vitesse règle la taille et la visibilité des ondes.
+      if (distance > 2.5) addWave(x, y, distance);
+    }
+    previous = { x, y };
+  }, { passive: true });
+
+  section.addEventListener('pointerleave', () => { previous = null; }, { passive: true });
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+})();
