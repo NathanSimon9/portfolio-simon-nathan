@@ -88,6 +88,10 @@ function renderProject(project, projects) {
   const currentIndex = projects.findIndex((item) => item.id === project.id);
   const number = String(currentIndex + 1).padStart(2, "0");
   const tags = Array.isArray(project.tags) ? project.tags : [];
+  const gallery = Array.isArray(project.gallery) ? project.gallery.filter(Boolean) : [];
+  const projectMedia = [project.image, ...gallery].filter(Boolean);
+  const safeProjectUrl = typeof project.projectUrl === "string" && /^https?:\/\//i.test(project.projectUrl) ? project.projectUrl : "";
+  const safeVideoUrl = typeof project.video === "string" && project.video.trim() ? project.video.trim() : "";
 
   document.title = `${project.title} | Nathan Simon — Portfolio`;
   container.innerHTML = `
@@ -105,8 +109,19 @@ function renderProject(project, projects) {
       </aside>
     </header>
 
+    ${projectMedia.length || safeVideoUrl || safeProjectUrl ? `
+    <section class="project-showcase" aria-labelledby="project-showcase-title">
+      <div class="project-showcase__heading">
+        <p class="project-eyebrow">En images</p>
+        <h2 class="project-section-heading" id="project-showcase-title">Aperçu visuel</h2>
+      </div>
+      ${safeVideoUrl ? `<div class="project-showcase__video"><video controls playsinline preload="metadata" ${project.image ? `poster="${escapeHTML(project.image)}"` : ""}><source src="${escapeHTML(safeVideoUrl)}">Ton navigateur ne prend pas en charge la vidéo.</video></div>` : ""}
+      ${projectMedia.length ? `<div class="project-gallery ${projectMedia.length === 1 ? "project-gallery--single" : ""}">${projectMedia.map((src, index) => `<figure class="project-gallery__item"><img src="${escapeHTML(src)}" alt="${escapeHTML(project.title)} — aperçu ${index + 1}" loading="lazy"><figcaption>APERÇU ${String(index + 1).padStart(2, "0")}</figcaption></figure>`).join("")}</div>` : ""}
+      ${safeProjectUrl ? `<div class="project-showcase__actions"><a class="project-action-button project-action-button--primary" href="${escapeHTML(safeProjectUrl)}" target="_blank" rel="noopener noreferrer">Ouvrir le projet en ligne <span aria-hidden="true">↗</span></a></div>` : ""}
+    </section>` : ""}
+
     <section aria-labelledby="project-details-title">
-      <h2 class="project-section-heading" id="project-details-title">Aperçu du projet</h2>
+      <h2 class="project-section-heading" id="project-details-title">À propos du projet</h2>
       <div class="project-info-grid">
         <section class="project-info-card">
           <span class="project-info-card__number">01 / CONTEXTE</span>
@@ -127,7 +142,8 @@ function renderProject(project, projects) {
     </section>
 
     <div class="project-actions">
-      <a class="project-action-button project-action-button--primary" href="index.html#projets"><span aria-hidden="true">←</span> Revenir à tous les projets</a>
+      ${safeProjectUrl ? `<a class="project-action-button project-action-button--primary" href="${escapeHTML(safeProjectUrl)}" target="_blank" rel="noopener noreferrer">Ouvrir le projet <span aria-hidden="true">↗</span></a>` : ""}
+      <a class="project-action-button" href="index.html#projets"><span aria-hidden="true">←</span> Revenir à tous les projets</a>
       <button class="project-action-button" type="button" data-copy-project><span aria-hidden="true">↗</span> Copier le lien du projet</button>
     </div>
   `;
