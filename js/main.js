@@ -317,30 +317,37 @@ if (demoVideo && soundToggle) {
   });
 }
 
-const skillMeters = document.querySelectorAll('.software-list meter[data-value]');
+const skillMeters = document.querySelectorAll('.software-list .progress-bar[data-value]');
 
 if (skillMeters.length) {
+  const animatedMeters = new Set();
+
   const animateMeter = (meter) => {
+    if (animatedMeters.has(meter)) return;
+    animatedMeters.add(meter);
     const target = Number(meter.dataset.value);
-    const startTime = performance.now();
+    const startTime = Date.now();
+    meter.style.setProperty('--meter-progress', '0%');
 
-    function updateMeter(now) {
-      const progress = Math.min(1, (now - startTime) / 900);
-      meter.value = target * (1 - Math.pow(1 - progress, 3));
-      if (progress < 1) requestAnimationFrame(updateMeter);
-    }
-
-    requestAnimationFrame(updateMeter);
+    const timer = window.setInterval(() => {
+      const progress = Math.min(1, (Date.now() - startTime) / 900);
+      const value = target * (1 - Math.pow(1 - progress, 3));
+      meter.setAttribute('aria-valuenow', String(Math.round(value)));
+      meter.style.setProperty('--meter-progress', `${value}%`);
+      if (progress >= 1) window.clearInterval(timer);
+    }, 16);
   };
 
-  const meterObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateMeter(entry.target);
-        observer.unobserve(entry.target);
+  const startVisibleMeters = () => {
+    skillMeters.forEach((meter) => {
+      const rect = meter.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+        animateMeter(meter);
       }
     });
-  }, { threshold: 0.35 });
+  };
 
-  skillMeters.forEach((meter) => meterObserver.observe(meter));
+  window.addEventListener('scroll', startVisibleMeters, { passive: true });
+  window.addEventListener('resize', startVisibleMeters);
+  startVisibleMeters();
 }
