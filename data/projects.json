@@ -33,19 +33,18 @@
   },
   {
     "id": 3,
-    "title": "Landing page produit",
-    "shortDescription": "Une page de présentation pour mettre en valeur un produit ou une marque.",
-    "context": "Ce projet visait à créer une landing page efficace, moderne et orientée conversion pour une marque fictive.",
-    "role": "Design visuel, hiérarchie de contenu et animation légère.",
-    "result": "La page présente le produit de manière claire avec un impact visuel fort et une navigation fluide.",
+    "title": "Singularité",
+    "shortDescription": "Une animation 2D qui explique le phénomène des trous noirs à travers le voyage d’un petit astronaute dans l’espace. À l’aide d’illustrations et d’animations, le projet vulgarise ce phénomène astronomique de manière visuelle et accessible.",
+    "context": "Réalisé en équipe dans le cadre du cours Animation 2D, ce projet consistait à expliquer un sujet au choix en une minute. Nous avons choisi les trous noirs et créé une animation mettant en scène un astronaute qui découvre ce phénomène afin de le rendre accessible et intéressant.",
+    "role": "Animation 2D, création visuelle, montage et montage sonore. J’ai participé à la conception des illustrations et à l’animation du personnage à l’aide d’After Effects, notamment avec l’outil Puppet Warp pour obtenir des mouvements plus organiques.",
+    "result": "L’animation a remporté le concours audiovisuel 2025 dans la catégorie animation. Le projet se démarque par son approche visuelle et sa capacité à vulgariser un phénomène scientifique complexe en une minute, grâce à des illustrations originales et à des animations fluides.",
     "tags": [
-      "Marketing",
-      "Animation",
-      "Branding"
+      "Animation 2D",
+      "Vidéo"
     ],
-    "image": "",
-    "gallery": [],
+    "image": "assets/images/projet/Screenshot 2026-10-04 005907.png",
+    "gallery": ["assets/images/projet/Screenshot 2026-10-04 005806.png","assets/images/projet/Screenshot 2026-10-04 005851.png","assets/images/projet/Screenshot 2026-10-04 005925.png","assets/images/projet/Screenshot 2026-10-04 005953.png"],
     "projectUrl": "",
-    "video": ""
+    "video": "assets/images/video/singularité.mp4"
   }
 ]
