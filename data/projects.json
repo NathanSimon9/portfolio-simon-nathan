@@ -2,21 +2,18 @@
   {
     "id": 1,
     "title": "Le roi abandonné",
-    "shortDescription": "Un portfolio moderne pour présenter mes projets et mon parcours.",
-    "context": "J'ai créé ce projet pour présenter mes compétences, mes réalisations et mon identité visuelle dans un format simple et professionnel.",
-    "role": "Design, développement front-end et organisation du contenu.",
-    "result": "Le site permet de présenter mon travail avec une navigation claire et une interface inspirée du design contemporain.",
+    "shortDescription": "Un court métrage psychologique qui explore les effets de la solitude à travers l’histoire d’un homme jouant aux échecs, jusqu’à ce qu’il réalise qu’il est seul face à lui-même.",
+    "context": "Réalisé dans le cadre du cours Vidéo 1, ce court métrage explore les conséquences psychologiques de l’isolement. À travers une partie d’échecs et une mise en scène travaillée, nous cherchons à plonger le spectateur dans la solitude du personnage et à sensibiliser à l’importance de demander de l’aide.",
+    "role": "Réalisation, direction artistique et montage. J’ai participé à la mise en scène, au choix des angles de caméra, à la création de l’ambiance visuelle et à l’assemblage final des séquences sur DaVinci Resolve.",
+    "result": "Le court métrage a remporté le concours audiovisuel 2026 dans la catégorie vidéo. Le résultat final se distingue par son ambiance sombre, son travail sur l’éclairage, ses angles de caméra et sa conception sonore, qui renforcent le sentiment de solitude et la détresse psychologique du personnage.",
     
     "tags": [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "JSON"
+      "Vidéo"
     ],
-    "image": "",
+    "image": "assets/images/projet/roi_abandonne.png",
     "gallery": [],
     "projectUrl": "",
-    "video": ""
+    "video": "assets/images/video/le-roi-abandonne (1).mp4"
 
   },
   {
