@@ -6,7 +6,20 @@
     "context": "J'ai créé ce projet pour présenter mes compétences, mes réalisations et mon identité visuelle dans un format simple et professionnel.",
     "role": "Design, développement front-end et organisation du contenu.",
     "result": "Le site permet de présenter mon travail avec une navigation claire et une interface inspirée du design contemporain.",
+<<<<<<< HEAD
     "tags": ["vidéo"]
+=======
+    "tags": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "JSON"
+    ],
+    "image": "",
+    "gallery": [],
+    "projectUrl": "",
+    "video": ""
+>>>>>>> 62c37b3b1cd6db735f42282bb844bbe03d72c19e
   },
   {
     "id": 2,
@@ -15,7 +28,15 @@
     "context": "Le but était de concevoir une application web intuitive pour gérer plusieurs tâches de manière simple et efficace.",
     "role": "UI design, architecture de l'information et intégration front-end.",
     "result": "L'application met en avant la lisibilité, l'accessibilité et la facilité d'utilisation.",
-    "tags": ["UX", "Interface", "Front-end"]
+    "tags": [
+      "UX",
+      "Interface",
+      "Front-end"
+    ],
+    "image": "",
+    "gallery": [],
+    "projectUrl": "",
+    "video": ""
   },
   {
     "id": 3,
@@ -24,6 +45,14 @@
     "context": "Ce projet visait à créer une landing page efficace, moderne et orientée conversion pour une marque fictive.",
     "role": "Design visuel, hiérarchie de contenu et animation légère.",
     "result": "La page présente le produit de manière claire avec un impact visuel fort et une navigation fluide.",
-    "tags": ["Marketing", "Animation", "Branding"]
+    "tags": [
+      "Marketing",
+      "Animation",
+      "Branding"
+    ],
+    "image": "",
+    "gallery": [],
+    "projectUrl": "",
+    "video": ""
   }
 ]
