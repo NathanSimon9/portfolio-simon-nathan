@@ -18,20 +18,18 @@
   },
   {
     "id": 2,
-    "title": "Application de gestion",
-    "shortDescription": "Une interface pour organiser et suivre des tâches ou des projets.",
-    "context": "Le but était de concevoir une application web intuitive pour gérer plusieurs tâches de manière simple et efficace.",
-    "role": "UI design, architecture de l'information et intégration front-end.",
-    "result": "L'application met en avant la lisibilité, l'accessibilité et la facilité d'utilisation.",
+    "title": "Otage",
+    "shortDescription": "Un court métrage en noir et blanc qui plonge le spectateur dans l’esprit d’un homme pris en otage. À travers des plans macro, ses expressions et ses gestes révèlent progressivement la peur et l’emprise psychologique qu’il subit.",
+    "context": "Réalisé en équipe dans le cadre du cours Vidéo 2, ce court métrage en noir et blanc explore l’emprise psychologique à travers l’histoire d’un homme capturé. Le projet mise sur des plans macro du corps humain, des expressions faciales et des gestes pour transmettre la peur et la détresse du personnage.",
+    "role": "Réalisation, direction artistique, montage et montage sonore. J’ai participé à la construction de l’ambiance visuelle en noir et blanc, au choix des cadrages macro et à l’assemblage des séquences sur DaVinci Resolve afin de renforcer la tension et le sentiment d’emprise.",
+    "result": "Le court métrage a obtenu une mention à la bourse FSAL 2026. Grâce à ses plans macro, son esthétique en noir et blanc et son travail sonore, le film parvient à transmettre la peur et l’emprise psychologique vécues par le personnage.",
     "tags": [
-      "UX",
-      "Interface",
-      "Front-end"
+      "Vidéo"
     ],
-    "image": "",
-    "gallery": [],
+    "image": "assets/images/projet/Screenshot 2026-10-04 001001.png",
+    "gallery": ["assets/images/projet/Screenshot 2026-10-04 000919.png","assets/images/projet/Screenshot 2026-10-04 000938.png","assets/images/projet/Screenshot 2026-10-04 001038.png","assets/images/projet/Screenshot 2026-10-04 001101.png"],
     "projectUrl": "",
-    "video": ""
+    "video": "assets/images/video/otage.mp4"
   },
   {
     "id": 3,
