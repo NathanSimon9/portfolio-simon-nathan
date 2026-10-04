@@ -1,12 +1,12 @@
 [
   {
     "id": 1,
-    "title": "Portfolio personnel",
+    "title": "Le roi abandonné",
     "shortDescription": "Un portfolio moderne pour présenter mes projets et mon parcours.",
     "context": "J'ai créé ce projet pour présenter mes compétences, mes réalisations et mon identité visuelle dans un format simple et professionnel.",
     "role": "Design, développement front-end et organisation du contenu.",
     "result": "Le site permet de présenter mon travail avec une navigation claire et une interface inspirée du design contemporain.",
-    "tags": ["HTML", "CSS", "JavaScript", "JSON"]
+    "tags": ["vidéo"]
   },
   {
     "id": 2,
