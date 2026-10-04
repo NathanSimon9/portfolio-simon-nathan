@@ -46,5 +46,21 @@
     "gallery": ["assets/images/projet/Screenshot 2026-10-04 005806.png","assets/images/projet/Screenshot 2026-10-04 005851.png","assets/images/projet/Screenshot 2026-10-04 005925.png","assets/images/projet/Screenshot 2026-10-04 005953.png"],
     "projectUrl": "",
     "video": "assets/images/video/singularité.mp4"
+  },
+  {
+    "id": 4,
+    "title": "Gougoulamou",
+    "shortDescription": "Une animation 2D qui raconte l’histoire d’un monstre rejeté par la société en raison de son apparence. Lorsqu’il cherche à se baigner dans une piscine, il se heurte à l’exclusion, jusqu’à ce qu’il rencontre quelqu’un qui lui ressemble.",
+    "context": "Ce projet personnel a été réalisé dans le but d’aider ma petite cousine à surmonter sa peur du monstre qu’elle croyait caché dans sa garde-robe. En créant une animation 2D qui présente le Gougoulamou comme un monstre gentil malgré son apparence, je voulais lui montrer qu’il ne faut pas juger quelqu’un sur son apparence.",
+    "role": "Réalisation, animation 2D, création de personnages, prise de son et montage. J’ai créé les personnages et les décors sur Photoshop, réalisé les animations sur After Effects, puis effectué le montage vidéo et sonore sur DaVinci Resolve.",
+    "result": "L’animation a remporté le concours audiovisuel 2026 dans la catégorie animation. Ce projet personnel m’a permis de donner vie à un personnage original tout en abordant des thèmes comme l’exclusion, la différence et l’acceptation. Il a également permis de transformer une peur réelle en une histoire positive et accessible.",
+    "tags": [
+      "Animation 2D",
+      "Vidéo"
+    ],
+    "image": "assets/images/projet/Screenshot 2026-10-04 012316.png",
+    "gallery": ["assets/images/projet/Screenshot 2025-07-16 222222.png","assets/images/projet/Screenshot 2025-07-16 222319.png","assets/images/projet/Screenshot 2026-10-04 012336.png","assets/images/projet/Screenshot 2026-10-04 012402.png","assets/images/projet/Screenshot 2026-10-04 012429.png","assets/images/projet/Screenshot 2026-10-04 012518.png","assets/images/projet/Screenshot 2026-10-04 012532.png"],
+    "projectUrl": "https://youtu.be/bmxqb-pA4Fw?si=ViHqLRWVC_bQe2VW",
+    "video": "assets/images/video/gougoulamou.mp4"
   }
 ]
