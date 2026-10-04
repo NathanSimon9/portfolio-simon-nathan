@@ -62,5 +62,20 @@
     "gallery": ["assets/images/projet/Screenshot 2025-07-16 222222.png","assets/images/projet/Screenshot 2025-07-16 222319.png","assets/images/projet/Screenshot 2026-10-04 012336.png","assets/images/projet/Screenshot 2026-10-04 012402.png","assets/images/projet/Screenshot 2026-10-04 012429.png","assets/images/projet/Screenshot 2026-10-04 012518.png","assets/images/projet/Screenshot 2026-10-04 012532.png"],
     "projectUrl": "https://youtu.be/bmxqb-pA4Fw?si=ViHqLRWVC_bQe2VW",
     "video": "assets/images/video/gougoulamou.mp4"
+  },
+  {
+    "id": 5,
+    "title": "Commerce intergalactique",
+    "shortDescription": "Un projet de modélisation 3D consistant à créer un commerce d’armes intergalactique situé à l’intérieur d’un vaisseau spatial en plein espace. L’objectif était de concevoir un environnement de science-fiction immersif en modélisant les éléments du décor et en imaginant un univers futuriste.",
+    "context": "Réalisé dans le cadre d’un cours de modélisation 3D, ce projet consistait à concevoir un commerce fictif dans un univers intergalactique. J’ai choisi de créer une boutique d’armes futuriste située à l’intérieur d’un vaisseau spatial, en imaginant son aménagement et son environnement pour donner vie à cet univers de science-fiction.",
+    "role": "Modélisation 3D et conception de l’environnement. J’ai créé les différents éléments du commerce d’armes intergalactique ainsi que le décor intérieur du vaisseau spatial afin de construire un univers de science-fiction cohérent et immersif.",
+    "result": "Le résultat final est un environnement 3D représentant un commerce d’armes intergalactique intégré dans un vaisseau spatial. Le projet m’a permis de développer mes compétences en modélisation 3D et en conception d’environnements, tout en donnant vie à un univers de science-fiction original.",
+    "tags": [
+      "3D"
+    ],
+    "image": "assets/images/projet/Projet 3D - Nathan Simon - photo 3.jpg",
+    "gallery": ["assets/images/projet/Projet 3D - Nathan Simon - photo 1.jpg","assets/images/projet/Projet 3D - Nathan Simon - photo 2.jpg","assets/images/projet/Projet 3D - Nathan Simon - photo 4.jpg"],
+    "projectUrl": "",
+    "video": ""
   }
 ]

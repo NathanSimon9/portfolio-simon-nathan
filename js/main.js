@@ -287,15 +287,69 @@ if (cloudSection && oceanSection) {
 }
 
 const projectsContainer = document.querySelector('[data-projects]');
+const projectFilters = document.querySelector('[data-project-filters]');
+const projectCarousel = document.querySelector('[data-project-carousel]');
+const carouselPrev = document.querySelector('[data-carousel-prev]');
+const carouselNext = document.querySelector('[data-carousel-next]');
 
 if (projectsContainer) {
+  let allProjects = [];
+  let activeCategory = 'Tous';
+
+  const updateCarouselButtons = () => {
+    if (!projectCarousel || !carouselPrev || !carouselNext) return;
+    const maxScroll = projectCarousel.scrollWidth - projectCarousel.clientWidth;
+    carouselPrev.disabled = projectCarousel.scrollLeft <= 2;
+    carouselNext.disabled = projectCarousel.scrollLeft >= maxScroll - 2;
+  };
+
+  const renderProjects = () => {
+    const visibleProjects = activeCategory === 'Tous'
+      ? allProjects
+      : allProjects.filter((project) => project.tags?.includes(activeCategory));
+    projectsContainer.replaceChildren();
+    const fragment = document.createDocumentFragment();
+    visibleProjects.forEach((project) => fragment.appendChild(createProjectCard(project)));
+    projectsContainer.appendChild(fragment);
+    if (projectCarousel) projectCarousel.scrollTo({ left: 0, behavior: 'instant' });
+    requestAnimationFrame(updateCarouselButtons);
+  };
+
+  const renderFilters = () => {
+    if (!projectFilters) return;
+    const categories = ['Tous', ...new Set(allProjects.flatMap((project) => project.tags || []))];
+    projectFilters.replaceChildren();
+    categories.forEach((category) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'project-filter';
+      button.textContent = category;
+      button.setAttribute('aria-pressed', String(category === activeCategory));
+      button.addEventListener('click', () => {
+        activeCategory = category;
+        projectFilters.querySelectorAll('.project-filter').forEach((filter) => {
+          filter.setAttribute('aria-pressed', String(filter === button));
+        });
+        renderProjects();
+      });
+      projectFilters.appendChild(button);
+    });
+  };
+
+  carouselPrev?.addEventListener('click', () => {
+    projectCarousel?.scrollBy({ left: -projectCarousel.clientWidth * 0.82, behavior: 'smooth' });
+  });
+  carouselNext?.addEventListener('click', () => {
+    projectCarousel?.scrollBy({ left: projectCarousel.clientWidth * 0.82, behavior: 'smooth' });
+  });
+  projectCarousel?.addEventListener('scroll', updateCarouselButtons, { passive: true });
+  window.addEventListener('resize', updateCarouselButtons);
+
   loadProjects()
     .then((projects) => {
-      const fragment = document.createDocumentFragment();
-      projects.forEach((project) => {
-        fragment.appendChild(createProjectCard(project));
-      });
-      projectsContainer.appendChild(fragment);
+      allProjects = projects;
+      renderFilters();
+      renderProjects();
     })
     .catch(() => {
       projectsContainer.innerHTML = '<p>Les projets sont momentanément indisponibles.</p>';

@@ -148,7 +148,16 @@
         <div class="container scene__content sea-content">
           <section class="projects-panel" id="projets" aria-labelledby="projects-title">
             <h2 id="projects-title">PROJETS</h2>
-            <div class="project-grid" data-projects></div>
+            <div class="projects-toolbar">
+              <div class="project-filters" data-project-filters aria-label="Filtrer les projets par catégorie"></div>
+              <div class="carousel-controls" aria-label="Navigation des projets">
+                <button class="carousel-button" type="button" data-carousel-prev aria-label="Projets précédents">←</button>
+                <button class="carousel-button" type="button" data-carousel-next aria-label="Projets suivants">→</button>
+              </div>
+            </div>
+            <div class="project-carousel" data-project-carousel>
+              <div class="project-grid" data-projects></div>
+            </div>
           </section>
           <section class="contact-panel" id="contact" aria-labelledby="contact-title">
             <h2 id="contact-title">CONTACT</h2>
