@@ -1,3 +1,4 @@
+/* Générateur réutilisable des cartes de projet affichées dans le carrousel. */
 export function createProjectCard(project) {
   const article = document.createElement("article");
   article.className = "project-card";

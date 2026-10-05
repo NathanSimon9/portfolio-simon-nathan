@@ -1,6 +1,7 @@
 import { loadProjects } from "./data.js";
 import { createProjectCard } from "./components/project-card.js";
 
+// Fond étoilé du hero : animation Canvas 2D.
 const heroCanvas = document.querySelector('.hero-canvas');
 
 if (heroCanvas) {
@@ -8,6 +9,7 @@ if (heroCanvas) {
   let stars = [];
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
+  // Crée un nombre limité d’étoiles selon la taille de l’écran.
   function initStars() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -24,6 +26,7 @@ if (heroCanvas) {
     }));
   }
 
+  // Adapte la résolution du canvas et recrée les étoiles au redimensionnement.
   function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     heroCanvas.width = window.innerWidth * dpr;
@@ -32,6 +35,7 @@ if (heroCanvas) {
     initStars();
   }
 
+  // Met à jour la position des étoiles et les replace lorsqu’elles sortent du cadre.
   function updateStars() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -49,7 +53,9 @@ if (heroCanvas) {
     });
   }
 
+  // Dessine les étoiles et programme la prochaine image.
   function drawStars() {
+    updateStars();
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -78,6 +84,7 @@ if (heroCanvas) {
   setInterval(updateStars, 16);
 }
 
+// Océan WebGL : shaders, vagues et ondulations déclenchées par l’interaction.
 const seaCanvas = document.querySelector('.heightfield-sea-canvas');
 
 if (seaCanvas) {
@@ -257,7 +264,8 @@ if (cloudSection && oceanSection) {
   let cloudParallaxY = 0;
   let ticking = false;
 
-  function updateCloudParallax() {
+  // Parallaxe des nuages, mise à jour via requestAnimationFrame pour limiter les calculs.
+function updateCloudParallax() {
     const oceanRect = oceanSection.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
 
@@ -288,6 +296,7 @@ if (cloudSection && oceanSection) {
 
 const projectsContainer = document.querySelector('[data-projects]');
 const projectFilters = document.querySelector('[data-project-filters]');
+// Carrousel des projets : boutons, défilement et état activé/désactivé.
 const projectCarousel = document.querySelector('[data-project-carousel]');
 const carouselPrev = document.querySelector('[data-carousel-prev]');
 const carouselNext = document.querySelector('[data-carousel-next]');

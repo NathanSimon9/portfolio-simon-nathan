@@ -1,3 +1,4 @@
+/* Chargement et préparation des données des projets du portfolio. */
 export async function loadProjects() {
   const response = await fetch("data/projects.json");
   if (!response.ok) {

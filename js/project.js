@@ -1,3 +1,4 @@
+/* Initialisation de la page détaillée et affichage des données du projet demandé. */
 import { loadProjects } from "./data.js";
 
 const container = document.querySelector("[data-project-detail]");
