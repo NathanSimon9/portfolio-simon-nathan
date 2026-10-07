@@ -122,6 +122,81 @@ Copilot
 
 il a fais lanimation demander.
 
+### IA
+
+## Date :
+
+06 octobre 2026
+
+## Prompt :
+
+### 1
+
+« Analyse mon code HTML, CSS et JavaScript et aide-moi à l’optimiser sans modifier ou briser les fonctionnalités déjà présentes dans mon portfolio. »
+
+### 2
+
+« Comment puis-je améliorer les performances de mon portfolio, notamment le chargement des images et des vidéos, tout en gardant une bonne qualité visuelle ? »
+
+### 3
+
+« Aide-moi à corriger et améliorer les animations, le carrousel et les interactions de mon portfolio tout en conservant le design actuel. »
+
+## Outil :
+
+ChatGpt
+
+## Résultat :
+
+### 1
+
+L’IA m’a aidé à analyser mon HTML, CSS et JavaScript afin de repérer des erreurs et de rendre mon code plus propre et plus optimisé. Elle m’a aussi aidé à organiser certaines parties du code sans modifier les fonctionnalités principales de mon portfolio.
+
+### 2
+
+L’IA m’a proposé différentes façons d’améliorer les performances, notamment en réduisant le poids des médias, en utilisant des formats plus adaptés et en ajoutant `loading="lazy"` pour éviter de charger les images et les vidéos trop tôt.
+
+### 3
+
+L’IA m’a aussi aidé à améliorer certaines animations et interactions, notamment le carrousel, le défilement et les effets présents dans les différentes sections. J’ai cependant dû tester les modifications proposées, car certaines solutions pouvaient régler un problème tout en créant un autre problème ailleurs. Cette utilisation m’a permis de mieux comprendre mon propre code et de voir l’IA comme un outil d’aide au développement plutôt que comme une solution qui fonctionne automatiquement.
+<br>
+
+# Bloc 2
+
+## Qu'est-ce que j'ai accompli depuis le dernier bloc?
+
+J'ai terminé une première version bêta de mon portfolio afin de pouvoir le tester et repérer les erreurs ou les éléments qui doivent encore être améliorés. Cette version me permet maintenant d'avoir une bonne base fonctionnelle et de voir concrètement ce qui doit être corrigé avant la version finale.
+
+## Quelle a été ma principale difficulté et comment je l'ai surmontée?
+
+Ma principale difficulté a été l'optimisation du portfolio, puisque plusieurs de mes projets contenaient des vidéos assez lourdes. Cela pouvait ralentir le chargement du site, surtout lorsqu'il y avait plusieurs médias sur une même page.
+
+Pour régler ce problème, j'ai réexporté mes vidéos en format MP4 en essayant de garder une bonne qualité tout en réduisant leur poids. J'ai également utilisé une technique vue dans le cours, soit `loading="lazy"`, qui permet de charger certains médias seulement lorsqu'ils sont sur le point d'être affichés. Cela permet d'éviter de charger tous les médias du portfolio dès l'ouverture de la page.
+
+## Qu'est-ce que j'ai appris que je ne savais pas avant?
+
+J'ai appris à utiliser `loading="lazy"` pour optimiser le chargement des médias d'une page web. J'ai aussi découvert des outils permettant d'analyser un site web et de repérer différentes erreurs ou problèmes d'accessibilité, comme un mauvais contraste entre les couleurs.
+
+Cela m'a fait comprendre qu'un site peut fonctionner correctement tout en ayant plusieurs éléments qui peuvent encore être améliorés, notamment au niveau de l'accessibilité, des performances et de l'expérience utilisateur.
+
+## Quelle est ma prochaine étape concrète?
+
+Ma prochaine étape est de corriger les erreurs que je vais trouver en testant la version bêta de mon portfolio. Je vais également adapter le site pour les téléphones afin qu'il soit responsive et que la navigation, les animations et les différents projets restent fonctionnels sur un écran plus petit.
+
+## Est-ce que j'ai utilisé l'IA? Si oui, pour quoi et qu'est-ce que ça m'a appris?
+
+Oui, j'ai utilisé l'IA principalement pour m'aider dans le développement et l'optimisation de mon portfolio. Je l'ai utilisée pour m'aider à trouver des problèmes dans mon code HTML, CSS et JavaScript, optimiser certaines parties du site et trouver des solutions pour mes animations et mes interactions.
+
+Je l'ai également utilisée pour m'aider à organiser certaines parties du code, notamment la structure des projets et le fonctionnement du carrousel, des animations et de certaines interactions avec le scroll. L'IA m'a surtout servi comme outil d'aide et de recherche de solutions lorsque je rencontrais un problème, plutôt que de simplement générer tout le site à ma place.
+
+Cela m'a permis de mieux comprendre certaines techniques que je ne connaissais pas, notamment comment optimiser le chargement des médias, gérer des animations avec JavaScript et améliorer la structure de mon code. J'ai aussi appris qu'il faut toujours tester les solutions proposées par l'IA, car une modification qui semble correcte peut parfois créer des problèmes ailleurs dans le site.
+
+
+
+<br>
+
+
+
 
 
 
