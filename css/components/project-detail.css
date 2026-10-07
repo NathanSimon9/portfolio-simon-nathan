@@ -212,6 +212,11 @@
   line-height: 0.95;
 }
 
+/* Le « / » qui sépare le numéro du projet et le total. */
+.project-index-number span {
+  color: var(--project-cyan);
+}
+
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -550,6 +555,4 @@
 .project-showcase__video { margin-bottom: clamp(12px, 2vw, 24px); overflow: hidden; border: 1px solid var(--project-line); background: #020308; }
 .project-showcase__video video { display: block; width: 100%; max-height: 78vh; }
 .project-showcase__actions { display: flex; justify-content: flex-start; margin-top: 20px; }
-.project-card__action span { display: inline-block; margin-left: 0.3em; transition: transform 180ms ease; }
-.project-card__link:hover .project-card__action span { transform: translate(3px, -3px); }
 @media (max-width: 700px) { .project-gallery { grid-template-columns: minmax(0, 1fr); } }

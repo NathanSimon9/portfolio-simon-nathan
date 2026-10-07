@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/components/project-detail.css" />
   </head>
   <body class="project-page-body">
+    <!-- Fond étoilé (canvas animé par js/project.js) et voile de couleur -->
     <canvas class="project-space-canvas" aria-hidden="true"></canvas>
     <div class="project-space-haze" aria-hidden="true"></div>
 
@@ -38,6 +39,7 @@
           <span class="project-availability"><span></span> ÉTUDE DE PROJET</span>
         </div>
 
+        <!-- Contenu du projet : rempli par js/project.js selon ?id=… dans l'URL -->
         <article class="project-detail" data-project-detail aria-live="polite">
           <div class="project-loading">Chargement du projet<span>…</span></div>
         </article>

@@ -104,16 +104,3 @@
     transition: none;
   }
 }
-
-
-
-/* Défilement fluide vers les sections depuis la navigation */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}

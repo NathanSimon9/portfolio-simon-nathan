@@ -334,7 +334,6 @@
   scroll-behavior: smooth;
   /* Masque la barre native tout en conservant le défilement horizontal. */
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Anciennes versions d’Internet Explorer/Edge */
   overscroll-behavior-x: contain;
 }
 
@@ -477,6 +476,16 @@
   text-underline-offset: 0.2rem;
 }
 
+/* La flèche ↗ glisse légèrement quand on survole la carte. */
+.project-card__action span {
+  display: inline-block; /* nécessaire pour pouvoir déplacer la flèche avec transform */
+  transition: transform 180ms ease;
+}
+
+.project-card__link:hover .project-card__action span {
+  transform: translate(3px, -3px);
+}
+
 .contact-panel {
   margin-top: 8rem;
   text-align: center;
@@ -543,24 +552,7 @@
 
   .skills-panel { grid-template-columns: 1fr; }
 
-  /* La zone des projets traverse toute la largeur de l’écran, sans panneau extérieur. */
-.projects-panel {
-  width: 100vw;
-  min-width: 100vw;
-  max-width: none;
-  position: relative;
-  left: auto;
-  margin-left: calc(50% - 50vw);
-  transform: none;
-  box-sizing: border-box;
-  padding-inline: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.projects-toolbar {
+  .projects-toolbar {
     align-items: flex-start;
     flex-direction: column;
     margin-top: 1.5rem;

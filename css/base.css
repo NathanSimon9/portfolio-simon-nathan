@@ -1,4 +1,4 @@
-/* Styles de base. */
+/* Styles de base partagés par toutes les pages. */
 * {
   box-sizing: border-box;
 }
@@ -15,10 +15,18 @@ body {
 html {
   overflow-x: clip;
   overflow-y: auto;
+  /* Défilement fluide vers les sections depuis la navigation. */
+  scroll-behavior: smooth;
 }
 
 body {
   overflow-x: clip;
   overflow-y: visible;
   max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

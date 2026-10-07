@@ -1,21 +1,38 @@
+/* Page d'accueil : étoiles du hero, parallaxe des nuages, carrousel de projets,
+   bulles, vidéo de démo, barres de compétences et ondes de l'océan.
+   Chaque fonctionnalité vit dans sa propre fonction init…() et ignore
+   silencieusement les éléments absents de la page. */
 import { loadProjects } from "./data.js";
 import { createProjectCard } from "./components/project-card.js";
+import { onVisibilityChange, prefersReducedMotion } from "./utils.js";
 
-// Fond étoilé du hero : animation Canvas 2D.
-const heroCanvas = document.querySelector('.hero-canvas');
+/* Nombre aléatoire dans l'intervalle [min, max[. */
+const rand = (min, max) => min + Math.random() * (max - min);
 
-if (heroCanvas) {
-  const ctx = heroCanvas.getContext('2d');
+/* ------------------------------------------------------------------
+   1. HERO — fond étoilé (canvas 2D)
+   ------------------------------------------------------------------ */
+function initHeroStars() {
+  const canvas = document.querySelector(".hero-canvas");
+  const ctx = canvas?.getContext("2d");
+  if (!ctx) return;
+
+  const STAR_COUNT = 120;
+  // Vitesse de référence : l'animation d'origine mettait les étoiles à jour
+  // environ 120 fois par seconde. On garde ce rythme, mais indépendamment
+  // du taux de rafraîchissement de l'écran (60 Hz, 144 Hz…).
+  const UPDATES_PER_SECOND = 120;
+  const reduceMotion = prefersReducedMotion();
+
   let stars = [];
-  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  let width = 0;
+  let height = 0;
+  let rafId = 0;
+  let lastTime = 0;
 
-  // Crée un nombre limité d’étoiles selon la taille de l’écran.
-  function initStars() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const starCount = Math.min(120, Math.max(70, Math.floor((width * height) / 35)));
-
-    stars = Array.from({ length: starCount }, () => ({
+  // Crée les étoiles avec une position, une taille et une vitesse aléatoires.
+  function createStars() {
+    stars = Array.from({ length: STAR_COUNT }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       radius: Math.random() * 1.5 + 0.4,
@@ -26,333 +43,222 @@ if (heroCanvas) {
     }));
   }
 
-  // Adapte la résolution du canvas et recrée les étoiles au redimensionnement.
-  function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    heroCanvas.width = window.innerWidth * dpr;
-    heroCanvas.height = window.innerHeight * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    initStars();
-  }
+  // Fait avancer les étoiles ; `step` = nombre de mises à jour écoulées.
+  function updateStars(step) {
+    for (const star of stars) {
+      star.x += (star.speedX + Math.sin(star.drift) * 0.05) * step;
+      star.y += star.speedY * 0.5 * step;
+      star.drift += 0.008 * step;
 
-  // Met à jour la position des étoiles et les replace lorsqu’elles sortent du cadre.
-  function updateStars() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    stars.forEach((star) => {
-      star.x += star.speedX + Math.sin(star.drift) * 0.05;
-      star.y += star.speedY * 0.5;
-      star.drift += 0.008;
-
-      if (star.x < 0 || star.x > width) star.x = Math.random() * width;
-      if (star.y > height + 10) {
-        star.y = -10;
+      // On recycle les étoiles avant qu'elles atteignent le bord du canvas.
+      // Cela évite que le halo (shadowBlur) soit coupé par le bas du hero
+      // et crée une ligne blanche.
+      const edgeMargin = 8;
+      if (star.x < -edgeMargin || star.x > width + edgeMargin) {
         star.x = Math.random() * width;
       }
-    });
+      if (star.y > height - edgeMargin) {
+        star.y = -edgeMargin;
+        star.x = Math.random() * width;
+      }
+    }
   }
 
-  // Dessine les étoiles et programme la prochaine image.
-  function drawStars() {
-    updateStars();
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
+  // Dessine toutes les étoiles (scintillement + halo léger).
+  function drawStars(now) {
     ctx.clearRect(0, 0, width, height);
+    ctx.shadowColor = "rgba(255,255,255,0.35)"; // réinitialisé quand le canvas est redimensionné
 
-    stars.forEach((star) => {
-      const twinkle = 0.8 + Math.sin((star.x + star.y) * 0.03 + performance.now() * 0.0015) * 0.2;
+    for (const star of stars) {
+      const twinkle = 0.8 + Math.sin((star.x + star.y) * 0.03 + now * 0.0015) * 0.2;
       const glow = 0.35 + Math.sin(star.drift) * 0.12;
 
       ctx.beginPath();
       ctx.fillStyle = `rgba(255,255,255,${Math.min(1, star.alpha + twinkle * 0.12)})`;
       ctx.shadowBlur = 4 * glow;
-      ctx.shadowColor = 'rgba(255,255,255,0.35)';
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fill();
-    });
-
+    }
     ctx.shadowBlur = 0;
-    requestAnimationFrame(drawStars);
   }
 
-  resizeCanvas();
-  drawStars();
-  window.addEventListener('resize', resizeCanvas);
-
-  setInterval(updateStars, 16);
-}
-
-// Océan WebGL : shaders, vagues et ondulations déclenchées par l’interaction.
-const seaCanvas = document.querySelector('.heightfield-sea-canvas');
-
-if (seaCanvas) {
-  const gl = seaCanvas.getContext('webgl', { alpha: false, antialias: true });
-
-  if (gl) {
-    const vertexSource = `
-      attribute vec2 position;
-      uniform vec2 resolution;
-      uniform float time;
-      uniform vec3 ripples[8];
-      varying vec3 surfaceNormal;
-      varying vec3 surfacePosition;
-      varying float surfaceDepth;
-
-      float wave(vec2 point, float speed, float scale) {
-        return sin(point.x * scale + point.y * scale * 0.55 + time * speed);
-      }
-
-      float waterHeight(vec2 point) {
-        float height = 0.0;
-        height += wave(point, 0.75, 5.2) * 0.24;
-        height += wave(point * 1.8 + vec2(time * 0.03, -time * 0.02), -1.1, 7.0) * 0.14;
-        height += wave(point * 3.4 + vec2(-time * 0.04, time * 0.03), 1.45, 9.5) * 0.08;
-        for (int i = 0; i < 8; i++) {
-          float age = time - ripples[i].z;
-          float distanceToRipple = distance(vec2((point.x / 2.8) + 0.5, point.y / 28.0), ripples[i].xy);
-          height += sin(distanceToRipple * 95.0 - age * 16.0) * exp(-distanceToRipple * 8.0) * exp(-age * 0.7) * step(0.0, age) * step(age, 4.0) * 0.22;
-        }
-        return height;
-      }
-
-      void main() {
-        float aspect = resolution.x / resolution.y;
-        vec3 world = vec3(position.x * aspect * 1.35, waterHeight(position), position.y);
-        float sampleSize = 0.04;
-        float slopeX = waterHeight(position + vec2(sampleSize, 0.0)) - waterHeight(position - vec2(sampleSize, 0.0));
-        float slopeZ = waterHeight(position + vec2(0.0, sampleSize)) - waterHeight(position - vec2(0.0, sampleSize));
-        surfaceNormal = normalize(vec3(-slopeX * 2.8, 1.0, -slopeZ * 2.8));
-        surfacePosition = world;
-        surfaceDepth = position.y / 28.0;
-
-        vec3 camera = vec3(0.0, 1.45, -3.5);
-        vec3 target = vec3(0.0, 0.0, 13.0);
-        vec3 forward = normalize(target - camera);
-        vec3 right = normalize(cross(forward, vec3(0.0, 1.0, 0.0)));
-        vec3 up = cross(right, forward);
-        vec3 viewPosition = vec3(dot(world - camera, right), dot(world - camera, up), dot(world - camera, forward));
-        float focalLength = 1.0 / tan(radians(38.0));
-        float nearPlane = 0.1;
-        float farPlane = 42.0;
-        gl_Position = vec4(
-          viewPosition.x * focalLength / aspect,
-          viewPosition.y * focalLength,
-          (farPlane + nearPlane - 2.0 * nearPlane * viewPosition.z) / (farPlane - nearPlane),
-          viewPosition.z
-        );
-      }
-    `;
-    const fragmentSource = `
-      precision highp float;
-      uniform vec2 resolution;
-      uniform float time;
-      varying vec3 surfaceNormal;
-      varying vec3 surfacePosition;
-      varying float surfaceDepth;
-
-      void main() {
-        vec3 normal = normalize(surfaceNormal);
-        vec3 lightDirection = normalize(vec3(-0.35, 0.82, 0.42));
-        vec3 viewDirection = normalize(vec3(0.0, 0.65, 1.0));
-        vec3 halfDirection = normalize(lightDirection + viewDirection);
-
-        float horizon = smoothstep(0.0, 0.55, surfaceDepth);
-        float depth = smoothstep(0.0, 1.0, surfaceDepth);
-        float diffuse = max(dot(normal, lightDirection), 0.0);
-        float specular = pow(max(dot(normal, halfDirection), 0.0), 48.0);
-        float reflection = pow(1.0 - max(dot(normal, viewDirection), 0.0), 3.0);
-        float caustics = smoothstep(0.3, 0.9, sin(surfacePosition.x * 12.0 + surfacePosition.z * 1.8 + time * 1.5) * 0.5 + 0.5);
-
-        vec3 skyReflection = mix(vec3(0.58, 0.82, 0.98), vec3(0.08, 0.3, 0.52), horizon);
-        vec3 shallow = vec3(0.08, 0.46, 0.68);
-        vec3 deep = vec3(0.006, 0.055, 0.13);
-        vec3 color = mix(skyReflection, mix(shallow, deep, depth), 0.62);
-        color += diffuse * vec3(0.04, 0.16, 0.2);
-        color += specular * vec3(0.75, 0.92, 1.0) * (0.35 + reflection);
-        color += caustics * vec3(0.08, 0.22, 0.28) * (1.0 - depth) * 0.45;
-
-        gl_FragColor = vec4(color, 1.0);
-      }
-    `;
-
-    function createShader(type, source) {
-      const shader = gl.createShader(type);
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
-      return shader;
-    }
-
-    const program = gl.createProgram();
-    gl.attachShader(program, createShader(gl.VERTEX_SHADER, vertexSource));
-    gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fragmentSource));
-    gl.linkProgram(program);
-    gl.useProgram(program);
-
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    const mesh = [];
-    const columns = 120;
-    const rows = 80;
-    for (let row = 0; row < rows - 1; row += 1) {
-      for (let column = 0; column < columns - 1; column += 1) {
-        const x0 = (column / (columns - 1)) * 2 - 1;
-        const x1 = ((column + 1) / (columns - 1)) * 2 - 1;
-        const z0 = (row / (rows - 1)) * 28;
-        const z1 = ((row + 1) / (rows - 1)) * 28;
-        mesh.push(x0, z0, x1, z0, x0, z1, x1, z0, x1, z1, x0, z1);
-      }
-    }
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh), gl.STATIC_DRAW);
-
-    const position = gl.getAttribLocation(program, 'position');
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-    const resolution = gl.getUniformLocation(program, 'resolution');
-    const time = gl.getUniformLocation(program, 'time');
-    const rippleUniform = gl.getUniformLocation(program, 'ripples');
-    const ripples = Array.from({ length: 8 }, () => [0, 0, -10]);
-    let rippleIndex = 0;
-
-    function addRipple(event) {
-      const bounds = seaCanvas.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width;
-      const y = 1 - (event.clientY - bounds.top) / bounds.height;
-      if (x < 0 || x > 1 || y < 0 || y > 1) return;
-
-      ripples[rippleIndex] = [x, y, performance.now() * 0.001];
-      rippleIndex = (rippleIndex + 1) % ripples.length;
-    }
-
-    seaCanvas.addEventListener('pointerdown', (event) => {
-      seaCanvas.setPointerCapture(event.pointerId);
-      addRipple(event);
-    });
-    seaCanvas.addEventListener('pointermove', (event) => {
-      if (event.buttons) addRipple(event);
-    });
-
-    function resizeSeaCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      seaCanvas.width = Math.floor(seaCanvas.clientWidth * dpr);
-      seaCanvas.height = Math.floor(seaCanvas.clientHeight * dpr);
-      gl.viewport(0, 0, seaCanvas.width, seaCanvas.height);
-    }
-
-    function drawSea(now) {
-      gl.uniform2f(resolution, seaCanvas.width, seaCanvas.height);
-      gl.uniform1f(time, now * 0.001);
-      gl.uniform3fv(rippleUniform, new Float32Array(ripples.flat()));
-      gl.drawArrays(gl.TRIANGLES, 0, mesh.length / 2);
-      requestAnimationFrame(drawSea);
-    }
-
-    resizeSeaCanvas();
-    drawSea(0);
-    window.addEventListener('resize', resizeSeaCanvas);
+  // Boucle d'animation : un seul requestAnimationFrame par image.
+  function frame(now) {
+    // dt est plafonné pour éviter un "saut" au retour sur l'onglet.
+    const dt = Math.min(50, Math.max(0, now - lastTime));
+    lastTime = now;
+    updateStars((dt / 1000) * UPDATES_PER_SECOND);
+    drawStars(now);
+    rafId = requestAnimationFrame(frame);
   }
+
+  const start = () => {
+    if (rafId || reduceMotion) return;
+    lastTime = performance.now();
+    rafId = requestAnimationFrame(frame);
+  };
+
+  const stop = () => {
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+  };
+
+  // Adapte la résolution du canvas à sa taille réelle à l'écran (écrans Retina inclus).
+  // Les étoiles ne sont recréées que si la largeur change : sur mobile, la barre
+  // d'adresse qui apparaît/disparaît ne doit pas faire "clignoter" le ciel.
+  function resize() {
+    const newWidth = canvas.clientWidth;
+    const newHeight = canvas.clientHeight;
+    if (!newWidth || !newHeight) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(newWidth * dpr);
+    canvas.height = Math.round(newHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const widthChanged = newWidth !== width;
+    width = newWidth;
+    height = newHeight;
+    if (widthChanged || !stars.length) createStars();
+
+    // Mouvement réduit : image fixe, redessinée seulement quand la taille change.
+    if (reduceMotion) drawStars(performance.now());
+  }
+
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+
+  // L'animation ne tourne que lorsque le hero est visible à l'écran.
+  onVisibilityChange(canvas, (visible) => (visible ? start() : stop()));
 }
 
+/* ------------------------------------------------------------------
+   2. TRANSITION — parallaxe de la section de nuages
+   ------------------------------------------------------------------ */
+function initCloudParallax() {
+  const cloudSection = document.querySelector(".cloud-plain-section");
+  const oceanSection = document.querySelector(".sea-transition-section");
+  if (!cloudSection || !oceanSection) return;
 
-// Parallaxe de transition : la section de nuages descend légèrement avant l'océan.
-const cloudSection = document.querySelector('.cloud-plain-section');
-const oceanSection = document.querySelector('.sea-transition-section');
+  const MAX_SHIFT = 700; // décalage maximal en px
+  const SPEED = 0.35;    // fraction de la distance parcourue convertie en décalage
 
-if (cloudSection && oceanSection) {
-  let cloudParallaxY = 0;
+  let leadPx = 0;         // avance de la parallaxe (variable CSS --cloud-parallax-lead)
+  let currentShift = -1;  // dernier décalage appliqué (évite les écritures inutiles)
   let ticking = false;
 
-  // Parallaxe des nuages, mise à jour via requestAnimationFrame pour limiter les calculs.
-function updateCloudParallax() {
-    const oceanRect = oceanSection.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+  // La variable CSS peut être en vh ou en px : on la convertit en px seulement
+  // au chargement et au redimensionnement (pas à chaque défilement).
+  function readLead() {
+    const raw = getComputedStyle(cloudSection).getPropertyValue("--cloud-parallax-lead").trim();
+    const value = parseFloat(raw) || 0;
+    leadPx = raw.endsWith("vh") ? (value * window.innerHeight) / 100 : value;
+  }
 
-    const leadValue = getComputedStyle(cloudSection)
-      .getPropertyValue('--cloud-parallax-lead')
-      .trim();
-    const artificialOffset = leadValue.endsWith('vh')
-      ? (parseFloat(leadValue) * viewportHeight) / 100
-      : parseFloat(leadValue);
-    const distanceIntoView = Math.max(0, viewportHeight - oceanRect.top + artificialOffset);
-    const parallax = Math.min(700, distanceIntoView * 0.35);
-    cloudParallaxY = parallax;
-    cloudSection.style.setProperty('--cloud-parallax-y', `${cloudParallaxY}px`);
+  // Plus l'océan entre dans l'écran, plus la section de nuages descend.
+  function update() {
     ticking = false;
+    const distanceIntoView = Math.max(
+      0,
+      window.innerHeight - oceanSection.getBoundingClientRect().top + leadPx
+    );
+    const shift = Math.round(Math.min(MAX_SHIFT, distanceIntoView * SPEED) * 10) / 10;
+    if (shift === currentShift) return;
+    currentShift = shift;
+    cloudSection.style.setProperty("--cloud-parallax-y", `${shift}px`);
   }
 
-  function requestCloudParallaxUpdate() {
-    if (!ticking) {
-      window.requestAnimationFrame(updateCloudParallax);
-      ticking = true;
-    }
+  // Regroupe les événements de défilement : un seul calcul par image.
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
   }
 
-  window.addEventListener('scroll', requestCloudParallaxUpdate, { passive: true });
-  window.addEventListener('resize', requestCloudParallaxUpdate);
-  updateCloudParallax();
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", () => {
+    readLead();
+    requestUpdate();
+  });
+  readLead();
+  update();
 }
 
-const projectsContainer = document.querySelector('[data-projects]');
-const projectFilters = document.querySelector('[data-project-filters]');
-// Carrousel des projets : boutons, défilement et état activé/désactivé.
-const projectCarousel = document.querySelector('[data-project-carousel]');
-const carouselPrev = document.querySelector('[data-carousel-prev]');
-const carouselNext = document.querySelector('[data-carousel-next]');
+/* ------------------------------------------------------------------
+   3. PROJETS — filtres par catégorie et carrousel horizontal
+   ------------------------------------------------------------------ */
+function initProjects() {
+  const container = document.querySelector("[data-projects]");
+  if (!container) return;
 
-if (projectsContainer) {
+  const filtersBar = document.querySelector("[data-project-filters]");
+  const carousel = document.querySelector("[data-project-carousel]");
+  const prevButton = document.querySelector("[data-carousel-prev]");
+  const nextButton = document.querySelector("[data-carousel-next]");
+
+  const ALL = "Tous";
   let allProjects = [];
-  let activeCategory = 'Tous';
+  let activeCategory = ALL;
 
-  const updateCarouselButtons = () => {
-    if (!projectCarousel || !carouselPrev || !carouselNext) return;
-    const maxScroll = projectCarousel.scrollWidth - projectCarousel.clientWidth;
-    carouselPrev.disabled = projectCarousel.scrollLeft <= 2;
-    carouselNext.disabled = projectCarousel.scrollLeft >= maxScroll - 2;
-  };
+  // Active/désactive les flèches selon la position de défilement (marge de 2 px).
+  function updateCarouselButtons() {
+    if (!carousel || !prevButton || !nextButton) return;
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    prevButton.disabled = carousel.scrollLeft <= 2;
+    nextButton.disabled = carousel.scrollLeft >= maxScroll - 2;
+  }
 
-  const renderProjects = () => {
-    const visibleProjects = activeCategory === 'Tous'
-      ? allProjects
-      : allProjects.filter((project) => project.tags?.includes(activeCategory));
-    projectsContainer.replaceChildren();
+  // Affiche les cartes de la catégorie active et revient au début du carrousel.
+  function renderProjects() {
+    const visible =
+      activeCategory === ALL
+        ? allProjects
+        : allProjects.filter((project) => project.tags?.includes(activeCategory));
+
     const fragment = document.createDocumentFragment();
-    visibleProjects.forEach((project) => fragment.appendChild(createProjectCard(project)));
-    projectsContainer.appendChild(fragment);
-    if (projectCarousel) projectCarousel.scrollTo({ left: 0, behavior: 'instant' });
+    visible.forEach((project) => fragment.appendChild(createProjectCard(project)));
+    container.replaceChildren(fragment);
+
+    carousel?.scrollTo({ left: 0, behavior: "instant" });
     requestAnimationFrame(updateCarouselButtons);
-  };
+  }
 
-  const renderFilters = () => {
-    if (!projectFilters) return;
-    const categories = ['Tous', ...new Set(allProjects.flatMap((project) => project.tags || []))];
-    projectFilters.replaceChildren();
+  // Crée un bouton de filtre par catégorie (les catégories viennent des tags du JSON).
+  function renderFilters() {
+    if (!filtersBar) return;
+    const categories = [ALL, ...new Set(allProjects.flatMap((project) => project.tags || []))];
+    const fragment = document.createDocumentFragment();
+
     categories.forEach((category) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'project-filter';
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "project-filter";
+      button.dataset.category = category;
       button.textContent = category;
-      button.setAttribute('aria-pressed', String(category === activeCategory));
-      button.addEventListener('click', () => {
-        activeCategory = category;
-        projectFilters.querySelectorAll('.project-filter').forEach((filter) => {
-          filter.setAttribute('aria-pressed', String(filter === button));
-        });
-        renderProjects();
-      });
-      projectFilters.appendChild(button);
+      button.setAttribute("aria-pressed", String(category === activeCategory));
+      fragment.appendChild(button);
     });
-  };
+    filtersBar.replaceChildren(fragment);
+  }
 
-  carouselPrev?.addEventListener('click', () => {
-    projectCarousel?.scrollBy({ left: -projectCarousel.clientWidth * 0.82, behavior: 'smooth' });
+  // Un seul écouteur pour tous les boutons de filtre (délégation d'événements).
+  filtersBar?.addEventListener("click", (event) => {
+    const button = event.target.closest(".project-filter");
+    if (!button) return;
+    activeCategory = button.dataset.category;
+    filtersBar.querySelectorAll(".project-filter").forEach((filter) => {
+      filter.setAttribute("aria-pressed", String(filter === button));
+    });
+    renderProjects();
   });
-  carouselNext?.addEventListener('click', () => {
-    projectCarousel?.scrollBy({ left: projectCarousel.clientWidth * 0.82, behavior: 'smooth' });
-  });
-  projectCarousel?.addEventListener('scroll', updateCarouselButtons, { passive: true });
-  window.addEventListener('resize', updateCarouselButtons);
+
+  // Les flèches font défiler d'environ 82 % de la largeur visible.
+  const scrollCarousel = (direction) =>
+    carousel?.scrollBy({ left: direction * carousel.clientWidth * 0.82, behavior: "smooth" });
+  prevButton?.addEventListener("click", () => scrollCarousel(-1));
+  nextButton?.addEventListener("click", () => scrollCarousel(1));
+  carousel?.addEventListener("scroll", updateCarouselButtons, { passive: true });
+  window.addEventListener("resize", updateCarouselButtons);
 
   loadProjects()
     .then((projects) => {
@@ -360,142 +266,188 @@ if (projectsContainer) {
       renderFilters();
       renderProjects();
     })
-    .catch(() => {
-      projectsContainer.innerHTML = '<p>Les projets sont momentanément indisponibles.</p>';
+    .catch((error) => {
+      console.error(error);
+      container.innerHTML = "<p>Les projets sont momentanément indisponibles.</p>";
     });
 }
 
-const bubbleLayer = document.querySelector('.bubble-layer');
+/* ------------------------------------------------------------------
+   4. OCÉAN — bulles interactives
+   ------------------------------------------------------------------ */
+function initBubbles() {
+  const layer = document.querySelector(".bubble-layer");
+  if (!layer) return;
 
-if (bubbleLayer) {
-  const bubbleCount = 16;
+  const BUBBLE_COUNT = 16;
+  const POP_DURATION = 260; // ms — doit rester égal à la durée de @keyframes bubblePop
 
-  for (let index = 0; index < bubbleCount; index += 1) {
-    const bubble = document.createElement('button');
-    bubble.className = 'ocean-bubble';
-    bubble.type = 'button';
-    bubble.setAttribute('aria-label', 'Faire éclater la bulle');
-    bubble.style.setProperty('--bubble-left', `${8 + Math.random() * 84}%`);
-    bubble.style.setProperty('--bubble-size', `${0.45 + Math.random() * 1.9}vw`);
-    bubble.style.setProperty('--bubble-duration', `${7 + Math.random() * 16}s`);
-    bubble.style.setProperty('--bubble-delay', `${-Math.random() * 20}s`);
-    bubble.style.setProperty('--bubble-drift', `${-3 + Math.random() * 6}vw`);
-    bubble.style.setProperty('--bubble-rise', `${85 + Math.random() * 45}vh`);
-    bubble.style.setProperty('--bubble-opacity', `${0.35 + Math.random() * 0.5}`);
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < BUBBLE_COUNT; index += 1) {
+    const bubble = document.createElement("button");
+    bubble.className = "ocean-bubble";
+    bubble.type = "button";
+    // Les bulles sont décoratives : on les retire de l'ordre de tabulation
+    // pour ne pas imposer 16 arrêts au clavier.
+    bubble.tabIndex = -1;
+    bubble.setAttribute("aria-label", "Faire éclater la bulle");
 
-    bubble.addEventListener('click', () => {
-      bubble.classList.add('is-popped');
-      window.setTimeout(() => bubble.remove(), 260);
-    });
-
-    bubbleLayer.appendChild(bubble);
+    // Chaque bulle reçoit ses propres paramètres, lus par l'animation CSS bubbleRise.
+    bubble.style.setProperty("--bubble-left", `${rand(8, 92)}%`);
+    bubble.style.setProperty("--bubble-size", `${rand(0.45, 2.35)}vw`);
+    bubble.style.setProperty("--bubble-duration", `${rand(7, 23)}s`);
+    bubble.style.setProperty("--bubble-delay", `${-rand(0, 20)}s`);
+    bubble.style.setProperty("--bubble-drift", `${rand(-3, 3)}vw`);
+    bubble.style.setProperty("--bubble-rise", `${rand(85, 130)}vh`);
+    bubble.style.setProperty("--bubble-opacity", `${rand(0.35, 0.85)}`);
+    fragment.appendChild(bubble);
   }
-}
+  layer.appendChild(fragment);
 
-const demoVideo = document.querySelector('.demo-video');
-const soundToggle = document.querySelector('.video-sound-toggle');
-
-if (demoVideo && soundToggle) {
-  soundToggle.addEventListener('click', () => {
-    demoVideo.muted = !demoVideo.muted;
-    soundToggle.setAttribute('aria-pressed', String(!demoVideo.muted));
-    soundToggle.setAttribute(
-      'aria-label',
-      demoVideo.muted ? 'Activer le son' : 'Couper le son'
-    );
-    soundToggle.textContent = demoVideo.muted ? '🔇' : '🔊';
+  // Un seul écouteur pour toutes les bulles : animation d'éclatement puis suppression.
+  layer.addEventListener("click", (event) => {
+    const bubble = event.target.closest(".ocean-bubble");
+    if (!bubble || bubble.classList.contains("is-popped")) return;
+    bubble.classList.add("is-popped");
+    window.setTimeout(() => bubble.remove(), POP_DURATION);
   });
 }
 
-const skillMeters = document.querySelectorAll('.software-list .progress-bar[data-value]');
+/* ------------------------------------------------------------------
+   5. DÉMO RÉEL — vidéo et bouton de son
+   ------------------------------------------------------------------ */
+function initDemoVideo() {
+  const video = document.querySelector(".demo-video");
+  if (!video) return;
 
-if (skillMeters.length) {
-  const animatedMeters = new Set();
+  // La vidéo ne joue (et ne consomme du processeur) que lorsqu'elle est visible.
+  // Cela coupe aussi le son si elle a été activée puis quittée en défilant.
+  onVisibilityChange(
+    video,
+    (visible) => {
+      if (visible) video.play().catch(() => {}); // lecture refusée par le navigateur : on ignore
+      else video.pause();
+    },
+    "100px"
+  );
 
-  const animateMeter = (meter) => {
-    if (animatedMeters.has(meter)) return;
-    animatedMeters.add(meter);
-    const target = Number(meter.dataset.value);
-    const startTime = Date.now();
-    meter.style.setProperty('--meter-progress', '0%');
-
-    const timer = window.setInterval(() => {
-      const progress = Math.min(1, (Date.now() - startTime) / 900);
-      const value = target * (1 - Math.pow(1 - progress, 3));
-      meter.setAttribute('aria-valuenow', String(Math.round(value)));
-      meter.style.setProperty('--meter-progress', `${value}%`);
-      if (progress >= 1) window.clearInterval(timer);
-    }, 16);
-  };
-
-  const startVisibleMeters = () => {
-    skillMeters.forEach((meter) => {
-      const rect = meter.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
-        animateMeter(meter);
-      }
-    });
-  };
-
-  window.addEventListener('scroll', startVisibleMeters, { passive: true });
-  window.addEventListener('resize', startVisibleMeters);
-  startVisibleMeters();
+  const soundToggle = document.querySelector(".video-sound-toggle");
+  soundToggle?.addEventListener("click", () => {
+    video.muted = !video.muted;
+    soundToggle.setAttribute("aria-pressed", String(!video.muted));
+    soundToggle.setAttribute("aria-label", video.muted ? "Activer le son" : "Couper le son");
+    soundToggle.textContent = video.muted ? "🔇" : "🔊";
+  });
 }
 
+/* ------------------------------------------------------------------
+   6. LOGICIELS — barres de progression animées à l'apparition
+   ------------------------------------------------------------------ */
+function initSkillMeters() {
+  const meters = document.querySelectorAll(".software-list .progress-bar[data-value]");
+  if (!meters.length) return;
 
-// Ondes blanches déclenchées par le déplacement du curseur dans l'océan.
-// Cette animation est dessinée sur son propre canvas : la distorsion automatique
-// et l'animation de fond de l'océan ne sont pas modifiées.
-(() => {
-  const section = document.querySelector('.sea-transition-section');
-  const canvas = section?.querySelector('.ocean-fluid-canvas');
-  if (!section || !canvas) return;
+  const DURATION = 900; // ms
 
-  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
-  if (!ctx) return;
+  // Met à jour la barre (variable CSS) et la valeur lue par les lecteurs d'écran.
+  const setValue = (meter, value) => {
+    meter.setAttribute("aria-valuenow", String(Math.round(value)));
+    meter.style.setProperty("--meter-progress", `${value}%`);
+  };
 
-  let width = 1;
-  let height = 1;
-  let dpr = 1;
-  let previous = null;
-  let raf = 0;
-  let lastFrame = 0;
-  const waves = [];
-
-  function resize() {
-    const rect = section.getBoundingClientRect();
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    width = Math.max(1, rect.width);
-    height = Math.max(1, rect.height);
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, width, height);
+  // Remplissage avec une courbe d'accélération "ease-out" cubique.
+  function animate(meter) {
+    const target = Number(meter.dataset.value) || 0;
+    if (prefersReducedMotion()) {
+      setValue(meter, target);
+      return;
+    }
+    const startTime = performance.now();
+    const step = (now) => {
+      const progress = Math.min(1, Math.max(0, (now - startTime) / DURATION));
+      setValue(meter, target * (1 - (1 - progress) ** 3));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   }
 
+  // Sans IntersectionObserver : on affiche directement les valeurs finales.
+  if (!("IntersectionObserver" in window)) {
+    meters.forEach((meter) => setValue(meter, Number(meter.dataset.value) || 0));
+    return;
+  }
+
+  // Chaque barre s'anime une seule fois, quand elle atteint 85 % de la hauteur de l'écran.
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        animate(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -15% 0px" }
+  );
+  meters.forEach((meter) => observer.observe(meter));
+}
+
+/* ------------------------------------------------------------------
+   7. OCÉAN — ondes blanches qui suivent le curseur (canvas 2D)
+   Dessinées sur leur propre canvas : le fond animé de l'océan n'est pas touché.
+   ------------------------------------------------------------------ */
+function initOceanWaves() {
+  const section = document.querySelector(".sea-transition-section");
+  const canvas = section?.querySelector(".ocean-fluid-canvas");
+  if (!section || !canvas) return;
+
+  // Effet réservé aux appareils avec souris/trackpad : les écrans tactiles
+  // ignoraient déjà l'effet, inutile de leur allouer un très grand canvas.
+  const hasMouse = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
+  if (!hasMouse || prefersReducedMotion()) return;
+
+  const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
+  if (!ctx) return;
+
+  const MAX_WAVES = 180;
+  const waves = [];
+  let width = 1;
+  let height = 1;
+  let previous = null; // dernière position du curseur dans la section
+  let rafId = 0;
+  let lastFrame = 0;
+
+  // Ajuste la résolution du canvas à la taille de la section (DPR plafonné à 1,5).
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = Math.max(1, section.clientWidth);
+    height = Math.max(1, section.clientHeight);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // Crée trois anneaux concentriques ; la vitesse du curseur règle taille et opacité.
   function addWave(x, y, speed) {
     const intensity = Math.min(1, speed / 30);
-    // Plusieurs anneaux espacés donnent une vraie lecture d'onde, pas une traînée.
-    const ringCount = 3;
-    for (let i = 0; i < ringCount; i++) {
+    for (let i = 0; i < 3; i += 1) {
       waves.push({
-        x, y,
+        x,
+        y,
         radius: 4 + i * (5 + intensity * 3),
         maxRadius: 48 + intensity * 125 + i * 18,
         age: i * 0.075,
         life: 0.75 + intensity * 0.45,
         alpha: 0.08 + intensity * 0.16,
         lineWidth: 0.7 + intensity * 1.1,
-        wobble: Math.random() * Math.PI * 2,
-        ellipticity: 0.88 + Math.random() * 0.24
+        ellipticity: 0.88 + Math.random() * 0.24,
       });
     }
-    if (waves.length > 180) waves.splice(0, waves.length - 180);
-    if (!raf) {
+    if (waves.length > MAX_WAVES) waves.splice(0, waves.length - MAX_WAVES);
+
+    // La boucle ne tourne que tant qu'il reste des ondes à dessiner.
+    if (!rafId) {
       lastFrame = performance.now();
-      raf = requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     }
   }
 
@@ -504,7 +456,8 @@ if (skillMeters.length) {
     lastFrame = now;
     ctx.clearRect(0, 0, width, height);
 
-    for (let i = waves.length - 1; i >= 0; i--) {
+    // Parcours à rebours pour pouvoir retirer les ondes terminées.
+    for (let i = waves.length - 1; i >= 0; i -= 1) {
       const wave = waves[i];
       wave.age += dt;
       if (wave.age >= wave.life) {
@@ -513,16 +466,14 @@ if (skillMeters.length) {
       }
 
       const progress = wave.age / wave.life;
-      const eased = 1 - Math.pow(1 - progress, 1.5);
-      const radius = wave.radius + (wave.maxRadius - wave.radius) * eased;
-      const fade = Math.pow(1 - progress, 1.8);
-      const alpha = wave.alpha * fade;
-      if (alpha < 0.006) continue;
+      const radius = wave.radius + (wave.maxRadius - wave.radius) * (1 - (1 - progress) ** 1.5);
+      const alpha = wave.alpha * (1 - progress) ** 1.8;
+      if (alpha < 0.006) continue; // trop transparente pour être visible
 
       ctx.save();
       ctx.translate(wave.x, wave.y);
       ctx.scale(1, wave.ellipticity);
-      ctx.globalCompositeOperation = 'screen';
+      ctx.globalCompositeOperation = "screen";
       ctx.lineWidth = wave.lineWidth * (1 - progress * 0.35);
       ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
       ctx.shadowColor = `rgba(225,245,255,${alpha * 0.45})`;
@@ -534,33 +485,70 @@ if (skillMeters.length) {
     }
 
     if (waves.length) {
-      raf = requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     } else {
-      raf = 0;
+      rafId = 0;
       ctx.clearRect(0, 0, width, height);
     }
   }
 
-  section.addEventListener('pointermove', (event) => {
-    if (event.pointerType === 'touch') return;
-    const rect = section.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-      previous = null;
-      return;
-    }
-    if (previous) {
-      const dx = x - previous.x;
-      const dy = y - previous.y;
-      const distance = Math.hypot(dx, dy);
-      // La vitesse règle la taille et la visibilité des ondes.
-      if (distance > 2.5) addWave(x, y, distance);
-    }
-    previous = { x, y };
-  }, { passive: true });
+  section.addEventListener(
+    "pointermove",
+    (event) => {
+      if (event.pointerType === "touch") return;
+      const rect = section.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (previous) {
+        const distance = Math.hypot(x - previous.x, y - previous.y);
+        if (distance > 2.5) addWave(x, y, distance); // ignore les micro-mouvements
+      }
+      previous = { x, y };
+    },
+    { passive: true }
+  );
+  section.addEventListener("pointerleave", () => (previous = null), { passive: true });
 
-  section.addEventListener('pointerleave', () => { previous = null; }, { passive: true });
-  window.addEventListener('resize', resize, { passive: true });
+  new ResizeObserver(resize).observe(section);
   resize();
-})();
+}
+
+/* ------------------------------------------------------------------
+   8. PERFORMANCE — met en pause les animations CSS des sections hors écran
+   Les règles CSS de la classe .is-offscreen figent les animations (nuages,
+   bulles, cartes, océan) ; le filtre SVG de l'eau est mis en pause à part.
+   ------------------------------------------------------------------ */
+function initOffscreenPause() {
+  const waterFilter = document.querySelector(".water-filter-defs");
+
+  const watch = (selector, onChange) => {
+    const section = document.querySelector(selector);
+    if (!section) return;
+    onVisibilityChange(
+      section,
+      (visible) => {
+        section.classList.toggle("is-offscreen", !visible);
+        onChange?.(visible);
+      },
+      "150px" // marge : l'animation reprend un peu avant l'arrivée à l'écran
+    );
+  };
+
+  watch(".cloud-plain-section");
+  watch(".sea-transition-section", (visible) => {
+    if (visible) waterFilter?.unpauseAnimations?.();
+    else waterFilter?.pauseAnimations?.();
+  });
+}
+
+/* ------------------------------------------------------------------
+   Démarrage
+   ------------------------------------------------------------------ */
+initHeroStars();
+initCloudParallax();
+initProjects();
+initBubbles();
+initDemoVideo();
+initSkillMeters();
+initOceanWaves();
+initOffscreenPause();

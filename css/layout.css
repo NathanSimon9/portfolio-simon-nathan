@@ -1,4 +1,5 @@
-/* Mise en page des sections principales et de leurs décors. */
+/* Mise en page des sections principales et de leurs décors.
+   Ordre de la page : hero → ciel (démo) → nuages (à propos) → océan (projets, contact). */
 .hero {
   position: relative;
   width: 100%;
@@ -25,10 +26,6 @@
   z-index: 1;
 }
 
-.cloud-layer--sky {
-  opacity: 0.9;
-}
-
 .cloud {
   --float-x: 0px;
   --float-y: 0px;
@@ -40,67 +37,6 @@
   object-fit: contain;
   pointer-events: none;
   transition: transform 300ms ease-out, opacity 300ms ease-out, filter 300ms ease-out;
-}
-
-.cloud-1 {
-  top: 10%;
-  left: -6%;
-  width: clamp(160px, 18vw, 340px);
-  --cloud-duration: 48s;
-  opacity: 0.7;
-}
-
-.cloud-2 {
-  top: 22%;
-  left: 26%;
-  width: clamp(260px, 30vw, 560px);
-  --cloud-duration: 62s;
-  animation-delay: -12s;
-  opacity: 0.78;
-}
-
-.cloud-3 {
-  top: 18%;
-  right: 8%;
-  width: clamp(210px, 24vw, 480px);
-  --cloud-duration: 54s;
-  animation-delay: -20s;
-  opacity: 0.8;
-}
-
-.cloud-4 {
-  bottom: 18%;
-  left: 42%;
-  width: clamp(300px, 34vw, 640px);
-  --cloud-duration: 72s;
-  animation-delay: -18s;
-  opacity: 0.7;
-}
-
-.cloud-5 {
-  top: 12%;
-  left: 8%;
-  width: clamp(190px, 22vw, 420px);
-  --cloud-duration: 58s;
-  opacity: 0.82;
-}
-
-.cloud-6 {
-  top: 28%;
-  right: 15%;
-  width: clamp(280px, 32vw, 600px);
-  --cloud-duration: 68s;
-  animation-delay: -24s;
-  opacity: 0.76;
-}
-
-.cloud-7 {
-  bottom: 16%;
-  left: 35%;
-  width: clamp(240px, 28vw, 520px);
-  --cloud-duration: 60s;
-  animation-delay: -30s;
-  opacity: 0.72;
 }
 
 @keyframes cloudFloat {
@@ -280,35 +216,6 @@
   }
 }
 
-.sea-transition-half {
-  position: relative;
-  width: 100%;
-  height: 50%;
-  margin: 0;
-  padding: 0;
-}
-
-.sea-transition-top {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.sea-transition-bottom {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: var(--cloud-bottom-color);
-  overflow: hidden;
-  border: none;
-  z-index: 0;
-}
-
 .sky-content {
   position: relative;
   z-index: 2;
@@ -317,13 +224,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.sky-label {
-  font-size: 1.4vw;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Structure commune des scènes */
@@ -343,8 +243,8 @@
   z-index: 2;
 }
 
-/* Îles : décor fixe de la transition ciel/océan.
-   Grande taille sur ordinateur, taille réduite sur tablette, une seule île sur téléphone. */
+/* Îles : décor de la transition ciel/océan. La même image est affichée deux fois ;
+   la seconde est inversée horizontalement. */
 .sea-transition-section > .scene__decor {
   z-index: 3;
   overflow: visible;
@@ -357,16 +257,28 @@
   left: 0;
   right: 0;
   top: 0;
-  height: 0; /* Le point d’ancrage vertical reste fixe au niveau de la transition. */
+  height: 0; /* Point d'ancrage vertical fixe : la position se règle avec les variables ci-dessous. */
   z-index: 3;
   pointer-events: none;
   overflow: visible;
 }
 
+/* CONTRÔLES DE HAUTEUR DES ÎLES
+   Modifie seulement ces 3 valeurs :
+   - grand écran (≥ 1900 px) : --island-top-desktop
+   - écran moyen (1401 à 1899 px) : --island-top-tablet
+   - petit écran (≤ 1400 px) : --island-top-phone
+   Valeur positive = descend l'image. Valeur négative = monte l'image. */
+:root {
+  --island-top-desktop: -870px;
+  --island-top-tablet: -580px;
+  --island-top-phone: -700px;
+}
+
+/* Grand écran : deux îles de 2000 px de large. */
 .island {
   position: absolute;
-  bottom: 0; /* La base reste exactement à la même hauteur; seule la partie haute monte quand l’île grandit. */
-  top: auto;
+  top: var(--island-top-desktop, 0px);
   width: 2000px;
   height: auto;
   transform-origin: 50% 100%;
@@ -375,25 +287,6 @@
   pointer-events: none;
   user-select: none;
   filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.16));
-}
-
-/* CONTRÔLES DE HAUTEUR DES ÎLES
-   Modifie seulement ces 3 valeurs :
-   - ordinateur : --island-top-desktop
-   - tablette/iPad : --island-top-tablet
-   - téléphone : --island-top-phone
-   Valeur positive = descend l'image. Valeur négative = monte l'image. */
-:root {
-  --island-top-desktop: -870px;
-  --island-top-tablet: -580px;
-  --island-top-phone: -700px;
-}
-
-/* Ordinateur : 2000 px.
-   TOP est volontairement réglable ici pour ajuster la hauteur des îles. */
-.island {
-  top: var(--island-top-desktop, 0px);
-  bottom: auto;
 }
 
 .island--left {
@@ -407,7 +300,7 @@
   transform: scaleX(-1);
 }
 
-/* Tablette (ex. iPad) : 1000 px, deux îles. */
+/* Écran moyen (ex. iPad paysage, petit portable) : deux îles de 1300 px. */
 @media (max-width: 1899px) and (min-width: 1401px) {
   .island {
     width: 1300px;
@@ -423,7 +316,7 @@
   }
 }
 
-/* Téléphone : une seule île centrée, 1000 px.
+/* Petit écran (téléphone, tablette portrait) : une seule île centrée de 1600 px.
    Le débordement est coupé horizontalement sans créer de largeur supplémentaire. */
 @media (max-width: 1400px) {
   .island {
@@ -440,4 +333,13 @@
   .island--right {
     display: none;
   }
+}
+
+/* Section hors écran : les animations CSS sont figées pour économiser le processeur.
+   La classe .is-offscreen est posée par js/main.js (initOffscreenPause).
+   La double classe garantit la priorité sur les animations déclarées plus loin. */
+.scene.is-offscreen,
+.scene.is-offscreen *,
+.scene.is-offscreen::before {
+  animation-play-state: paused;
 }
