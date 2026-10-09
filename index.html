@@ -29,7 +29,10 @@
           <nav class="nav container" aria-label="Navigation principale">
             <a class="logo" href="#accueil" aria-label="Retour à l’accueil">NS<span>.</span></a>
             <span class="nav-caption">PORTFOLIO MULTIMÉDIA</span>
-            <div class="menu">
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Ouvrir le menu">
+              <span></span><span></span><span></span>
+            </button>
+            <div class="menu" id="primary-menu">
               <a href="#apropos">À propos</a>
               <a href="#projets">Projets</a>
               <a href="#contact">Contact</a>
@@ -54,7 +57,8 @@
               <h2 id="demo-title">DÉMO RÉEL</h2>
               <div class="demo-frame">
                 <video class="demo-video" autoplay muted loop playsinline preload="metadata" aria-label="Démo vidéo de Nathan Simon">
-                  <source src="assets/images/video/demoreel.mp4" type="video/mp4" />
+                  <source src="assets/images/video/demo%20reel_vertical.mp4" type="video/mp4" media="(max-width: 700px)" />
+                  <source src="assets/images/video/demoreel.mp4" type="video/mp4" media="(min-width: 701px)" />
                 </video>
                 <button class="video-sound-toggle" type="button" aria-pressed="false" aria-label="Activer le son">🔇</button>
               </div>
@@ -148,7 +152,8 @@
           <section class="projects-panel" id="projets" aria-labelledby="projects-title">
             <h2 id="projects-title">PROJETS</h2>
             <div class="projects-toolbar">
-              <div class="project-filters" data-project-filters aria-label="Filtrer les projets par catégorie"></div>
+              <button class="filters-toggle" type="button" aria-expanded="false" aria-controls="project-filters-panel"><span class="filters-toggle__icon" aria-hidden="true">☰</span> Catégories</button>
+              <div class="project-filters" id="project-filters-panel" data-project-filters aria-label="Filtrer les projets par catégorie"></div>
               <div class="carousel-controls" aria-label="Navigation des projets">
                 <button class="carousel-button" type="button" data-carousel-prev aria-label="Projets précédents">←</button>
                 <button class="carousel-button" type="button" data-carousel-next aria-label="Projets suivants">→</button>

@@ -270,6 +270,8 @@
   box-shadow: none;
 }
 
+.filters-toggle { display: none; }
+
 .projects-toolbar {
   padding-inline: clamp(1rem, 4vw, 4rem);
   display: flex;
@@ -528,16 +530,47 @@
     width: min(100% - 2rem, 1100px);
   }
 
-  .hero-content h1 { font-size: 20vw; }
-  .hero-kicker { font-size: 3.7vw; }
-  .demo-frame {
-    width: 85vw;
-    max-width: none;
-    margin-left: -1rem;
-    margin-right: -1rem;
+  /* Sur mobile, le nom devient le point focal et reste parfaitement centré. */
+  .hero-content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100svh;
+    padding: 2rem 1rem;
   }
-  .demo-panel h2,
-  .skills-panel h2 { font-size: 8.2vw; }
+
+  .hero-content h1 {
+    width: 100%;
+    font-size: clamp(6.2rem, 27vw, 12rem);
+    line-height: 0.82;
+    text-align: center;
+    letter-spacing: 0.015em;
+  }
+
+  .hero-kicker {
+    font-size: clamp(0.85rem, 3.7vw, 1.1rem);
+    margin-top: 1.1rem;
+    text-align: center;
+  }
+
+  /* Démo verticale sur téléphone : moins large, plus haute et centrée. */
+  .demo-frame {
+    width: min(82vw, 390px);
+    aspect-ratio: 9 / 16;
+    margin: 0.9rem auto 0;
+    border-width: 3px;
+  }
+
+  .demo-video { object-fit: cover; }
+  .video-sound-toggle {
+    right: 0.65rem;
+    bottom: 0.65rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    font-size: 1rem;
+  }
+  .demo-panel h2 { font-size: clamp(4rem, 16vw, 7.5rem); line-height: 0.9; text-align: center; }
+  .skills-panel h2 { font-size: clamp(2.4rem, 10vw, 4.5rem); }
   .skills-list ul { font-size: 3.7vw; }
   .software-list li { font-size: 3.6vw; }
   .software-list .progress-bar { height: 2.8vw; border-width: 0.25vw; }
@@ -545,34 +578,67 @@
   .video-sound-toggle { font-size: 4vw; }
   .projects-panel h2,
   .contact-panel h2,
-  .cloud-content .skills-panel h2 { font-size: 16vw; }
+  .cloud-content .skills-panel h2 { font-size: clamp(4rem, 17vw, 7.5rem); line-height: 0.9; }
   .project-card h2 { font-size: 3.5vw; }
-  .contact-panel p { font-size: 4vw; }
-  .contact-icon { width: 8vw; }
+  .contact-panel p,
+  .contact-panel a { font-size: clamp(1.2rem, 5.5vw, 1.8rem); line-height: 1.35; overflow-wrap: anywhere; }
+  .contact-icon { width: clamp(2rem, 10vw, 3rem); }
 
   .skills-panel { grid-template-columns: 1fr; }
 
   .projects-toolbar {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-top: 1.5rem;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 1.1rem;
+    padding-inline: 0;
+    gap: 0.65rem;
   }
 
-  .project-carousel { margin-top: 1rem; }
-  .project-grid { gap: 1rem; }
-  .project-card { flex-basis: min(84vw, 420px); width: min(84vw, 420px); }
+  .filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgba(220, 242, 255, 0.42);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(4, 22, 48, 0.7);
+    font: 500 0.82rem "Space Grotesk", sans-serif;
+  }
 
+  .project-filters { display: none; flex-basis: 100%; gap: 0.45rem; }
+  .project-filters.is-open { display: flex; }
+  .project-filter { padding: 0.45rem 0.7rem; font-size: 0.76rem; }
+  .carousel-controls { margin-left: auto; }
+  .carousel-button { width: 2.4rem; height: 2.4rem; }
+
+  .project-carousel {
+    margin-top: 0.6rem;
+    padding: 0.8rem 0.15rem 1rem;
+  }
+  .project-grid { gap: 0.7rem; }
+  .project-card {
+    flex-basis: min(72vw, 260px);
+    width: min(72vw, 260px);
+    min-height: 0;
+    padding: 0.65rem;
+    border-radius: 0.8rem;
+  }
+
+  .project-card__media { aspect-ratio: 16 / 8; margin-bottom: 0.45rem; overflow: hidden; }
+  .project-card__media img { width: 100%; height: 100%; object-fit: cover; }
+  .project-card__body { padding: 0.35rem 0.2rem 0.15rem; }
   .project-card p {
     max-width: none;
-    margin-inline: auto;
-    font-size: 3.6vw;
+    margin: 0.35rem auto;
+    font-size: clamp(0.72rem, 3vw, 0.85rem);
+    line-height: 1.35;
   }
 
-  .project-card { min-height: 0; padding: 4vw; }
-  .project-card h2 { font-size: 5vw; }
-  .project-card__tags,
-  .project-card__action { font-size: 3.2vw; }
-  .project-filter { padding: 0.55rem 0.8rem; font-size: 0.8rem; }
+  .project-card h2 { font-size: clamp(0.95rem, 4vw, 1.15rem); margin-bottom: 0.25rem; }
+  .project-card__tags { gap: 0.25rem; margin: 0.35rem 0; font-size: 0.68rem; }
+  .project-card__action { font-size: 0.72rem; }
 
   .contact-panel {
     margin-top: 5rem;
@@ -597,4 +663,32 @@
     width: 85vw;
     max-width: none;
   }
+}
+
+/* Accessibilité mobile : typographie nettement plus grande et lisible. */
+@media (max-width: 700px) {
+  .hero-content h1 { font-size: clamp(6rem, 28vw, 11rem); }
+  .hero-kicker { font-size: clamp(1.05rem, 4.8vw, 1.35rem); line-height: 1.35; }
+
+  .demo-panel h2,
+  .skills-panel h2 { font-size: clamp(2.2rem, 10vw, 3.8rem); line-height: 0.98; }
+  .projects-panel h2,
+  .contact-panel h2,
+  .cloud-content .skills-panel h2 { font-size: clamp(3.2rem, 17vw, 5.8rem); line-height: 0.95; }
+  .skills-list ul { font-size: clamp(1.1rem, 5vw, 1.35rem); line-height: 1.55; }
+  .software-list li { font-size: clamp(1.05rem, 4.7vw, 1.3rem); line-height: 1.4; }
+  .contact-panel p { font-size: clamp(1.1rem, 4.8vw, 1.35rem); line-height: 1.5; }
+  .video-sound-toggle { font-size: 1.1rem; }
+
+  /* Garder les cartes compactes en hauteur malgré la typographie agrandie. */
+  .project-card { padding: 0.55rem; }
+  .project-card__media { aspect-ratio: 16 / 7; margin-bottom: 0.3rem; }
+  .project-card__body { padding: 0.2rem 0.15rem 0.1rem; }
+  .project-card h2 { font-size: clamp(1.2rem, 5.4vw, 1.55rem); line-height: 1.08; margin-bottom: 0.3rem; }
+  .project-card p { font-size: clamp(1rem, 4.3vw, 1.2rem); line-height: 1.3; margin: 0.25rem auto; }
+  .project-card__tags { font-size: clamp(0.9rem, 3.8vw, 1.05rem); line-height: 1.25; }
+  .project-card__action { font-size: clamp(0.95rem, 4vw, 1.1rem); }
+  .filters-toggle { font-size: 1rem; padding: 0.75rem 0.95rem; }
+  .project-filter { font-size: 0.95rem; padding: 0.55rem 0.75rem; }
+  .carousel-button { width: 2.8rem; height: 2.8rem; }
 }

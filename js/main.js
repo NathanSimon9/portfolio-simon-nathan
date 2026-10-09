@@ -188,6 +188,27 @@ function initCloudParallax() {
    3. PROJETS — filtres par catégorie et carrousel horizontal
    ------------------------------------------------------------------ */
 function initProjects() {
+  // Menus compacts pour la navigation principale et les filtres du carrousel.
+  const menuToggle = document.querySelector(".menu-toggle");
+  const primaryMenu = document.querySelector("#primary-menu");
+  menuToggle?.addEventListener("click", () => {
+    const isOpen = primaryMenu?.classList.toggle("is-open") ?? false;
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute("aria-label", isOpen ? "Fermer le menu" : "Ouvrir le menu");
+  });
+  primaryMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    primaryMenu.classList.remove("is-open");
+    menuToggle?.setAttribute("aria-expanded", "false");
+    menuToggle?.setAttribute("aria-label", "Ouvrir le menu");
+  }));
+
+  const filtersToggle = document.querySelector(".filters-toggle");
+  const filtersPanel = document.querySelector("#project-filters-panel");
+  filtersToggle?.addEventListener("click", () => {
+    const isOpen = filtersPanel?.classList.toggle("is-open") ?? false;
+    filtersToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
   const container = document.querySelector("[data-projects]");
   if (!container) return;
 
